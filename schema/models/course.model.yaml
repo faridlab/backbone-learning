@@ -1,0 +1,81 @@
+# =============================================================================
+# Domain: learning
+# Entity: Course
+# Description: A training course in the L&D catalog. On completion of a
+#              cert-granting course, learning signals backbone-employee to record
+#              the held certification (employee owns *held* certs; learning owns
+#              the *catalog* + *enrollments*).
+# =============================================================================
+
+models:
+  - name: Course
+    collection: courses
+    description: "A training course in the L&D catalog."
+
+    fields:
+      id:
+        type: uuid
+        attributes: ["@id", "@default(uuid)"]
+
+      company_id:
+        type: uuid
+        attributes: ["@required", "@exclude_from_foreign_key_check"]
+        description: "# logical FK organization.Company.id"
+
+      name:
+        type: string
+        attributes: ["@required", "@max(180)"]
+        description: "Course title"
+
+      description:
+        type: string?
+        description: "Long-form course description"
+
+      format:
+        type: CourseFormat
+        attributes: ["@required", "@default(online)"]
+        description: "Delivery format"
+
+      duration_hours:
+        type: decimal?
+        attributes: ["@precision(6,2)", "@non_negative"]
+        description: "Estimated duration in hours"
+
+      cost:
+        type: decimal?
+        attributes: ["@precision(18,2)", "@non_negative"]
+        description: "Monetary cost per enrollment"
+
+      provider:
+        type: string?
+        attributes: ["@max(180)"]
+        description: "External training provider"
+
+      certification_id:
+        type: uuid?
+        attributes: ["@exclude_from_foreign_key_check"]
+        description: "# logical FK employee.Certification.id (cert granted on completion)"
+
+      is_active:
+        type: bool
+        attributes: ["@default(true)"]
+        description: "Whether the course is bookable"
+
+      metadata:
+        type: Metadata
+        attributes: ["@audit_metadata"]
+
+    indexes:
+      - type: unique
+        fields: [company_id, name]
+        where: "deleted_at IS NULL"
+
+enums:
+  - name: CourseFormat
+    description: "Course delivery format."
+    variants:
+      - name: online
+        default: true
+      - name: onsite
+      - name: blended
+      - name: self_paced

@@ -1,0 +1,86 @@
+# =============================================================================
+# Domain: learning
+# Entity: EmployeeSkill
+# Description: An employee's proficiency in a granular skill. `verification`
+#              tracks how the proficiency was established (self_reported /
+#              assessed / certified); `proficiency` is the 1-5 level.
+# =============================================================================
+
+models:
+  - name: EmployeeSkill
+    collection: employee_skills
+    description: "An employee's proficiency in a skill."
+
+    fields:
+      id:
+        type: uuid
+        attributes: ["@id", "@default(uuid)"]
+
+      company_id:
+        type: uuid
+        attributes: ["@required", "@exclude_from_foreign_key_check"]
+        description: "# logical FK organization.Company.id"
+
+      employee_id:
+        type: uuid
+        attributes: ["@required", "@exclude_from_foreign_key_check"]
+        description: "# logical FK employee.Employee.id"
+
+      skill_id:
+        type: uuid
+        attributes: ["@required", "@foreign_key(Skill.id)"]
+        description: "# FK skills.id (in-module)"
+
+      proficiency:
+        type: ProficiencyLevel
+        attributes: ["@required", "@default(intermediate)"]
+
+      years_experience:
+        type: decimal?
+        attributes: ["@precision(5,1)", "@non_negative"]
+
+      verification:
+        type: SkillVerification
+        attributes: ["@required", "@default(self_reported)"]
+
+      verified_by:
+        type: uuid?
+        attributes: ["@exclude_from_foreign_key_check"]
+        description: "# logical FK employee.Employee.id (assessor)"
+
+      last_used_at:
+        type: date?
+
+      metadata:
+        type: Metadata
+        attributes: ["@audit_metadata"]
+
+    indexes:
+      - type: index
+        fields: [employee_id]
+      - type: index
+        fields: [skill_id]
+
+enums:
+  - name: ProficiencyLevel
+    description: "1 (novice) -> 5 (expert)."
+    variants:
+      - name: novice
+        description: "1 — aware"
+      - name: beginner
+        description: "2 — basic application"
+      - name: intermediate
+        default: true
+        description: "3 — independent"
+      - name: advanced
+        description: "4 — deep / can guide"
+      - name: expert
+        description: "5 — authority"
+
+  - name: SkillVerification
+    description: "How a skill proficiency was established."
+    variants:
+      - name: self_reported
+        default: true
+      - name: assessed
+      - name: certified

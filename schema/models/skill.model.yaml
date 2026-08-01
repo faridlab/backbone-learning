@@ -1,0 +1,54 @@
+# =============================================================================
+# Domain: learning
+# Entity: Skill
+# Description: A granular skill in the catalog (technical / soft / tool /
+#              language) — used for staffing, matching, and gap-analysis.
+#              Distinct from the appraisal-framework Competency catalog.
+# =============================================================================
+
+models:
+  - name: Skill
+    collection: skills
+    description: "Granular skill in the catalog (technical / soft / tool / language)."
+
+    fields:
+      id:
+        type: uuid
+        attributes: ["@id", "@default(uuid)"]
+
+      company_id:
+        type: uuid
+        attributes: ["@required", "@exclude_from_foreign_key_check"]
+        description: "# logical FK organization.Company.id"
+
+      name:
+        type: string
+        attributes: ["@required", "@max(120)"]
+
+      category:
+        type: SkillCategory?
+        description: "technical/soft/tool/language"
+
+      description:
+        type: string?
+
+      metadata:
+        type: Metadata
+        attributes: ["@audit_metadata"]
+
+    indexes:
+      - type: unique
+        fields: [company_id, name]
+        where: "deleted_at IS NULL"
+
+enums:
+  - name: SkillCategory
+    description: "Skill grouping."
+    variants:
+      - name: technical
+        default: true
+      - name: soft
+      - name: tool
+      - name: language
+      - name: domain
+      - name: certification

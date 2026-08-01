@@ -1,0 +1,51 @@
+# =============================================================================
+# Domain: learning
+# Entity: EmployeeCompetency
+# Description: An employee's assessed level on a competency (the competency
+#              matrix). Level (1-5) can feed backbone-performance talent
+#              calibration — cross-read, no write.
+# =============================================================================
+
+models:
+  - name: EmployeeCompetency
+    collection: employee_competencies
+    description: "An employee's assessed competency level (competency matrix)."
+
+    fields:
+      id:
+        type: uuid
+        attributes: ["@id", "@default(uuid)"]
+
+      company_id:
+        type: uuid
+        attributes: ["@required", "@exclude_from_foreign_key_check"]
+        description: "# logical FK organization.Company.id"
+
+      employee_id:
+        type: uuid
+        attributes: ["@required", "@exclude_from_foreign_key_check"]
+        description: "# logical FK employee.Employee.id"
+
+      competency_id:
+        type: uuid
+        attributes: ["@required", "@foreign_key(Competency.id)"]
+        description: "# FK competencies.id (in-module)"
+
+      level:
+        type: int
+        attributes: ["@required", "@range(1,5)", "@default(3)"]
+        description: "Assessed level 1 (novice) -> 5 (expert)"
+
+      assessed_at:
+        type: date?
+        description: "When the level was last assessed"
+
+      metadata:
+        type: Metadata
+        attributes: ["@audit_metadata"]
+
+    indexes:
+      - type: index
+        fields: [company_id, employee_id]
+      - type: index
+        fields: [competency_id]
