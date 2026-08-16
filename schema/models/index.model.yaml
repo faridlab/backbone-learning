@@ -12,6 +12,10 @@
 module: learning
 version: 2
 schema: learning
+
+# ADR-0014 company fence (Wave 1 P0 sweep, 2026-08-16): skills / competencies carry company_id today — a per-company taxonomy as
+# modeled; a future shared taxonomy is a declared posture flip away.
+company_fence: strict
 description: "learning & development — courses, enrollments, competencies, skills"
 
 config:
