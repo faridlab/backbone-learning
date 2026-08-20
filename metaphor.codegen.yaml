@@ -11,14 +11,15 @@
 # Add your hand-authored services, handlers, tests, and docs below as you write them.
 
 user_owned:
-  # Hand-authored behavior (services + their HTTP surface). Examples:
-  # - "src/application/service/onboarding_service.rs"
-  # - "src/presentation/http/guarded_routes.rs"
+  # The module was scaffolded by an earlier generator generation; the tree has
+  # since drifted from the current generator's layout (unheaded entity files,
+  # auth/bulk/usecases directories it no longer emits). Until a deliberate
+  # modernization pass reconciles the tree, the whole of src/ is user-owned so
+  # a `--force` generate is a no-op rather than a wipe.
+  - "src/**"
 
-  # Behavior tests (the golden cases / oracle) + BDD features.
-  - "tests/features/**"
-  # - "tests/*_golden_cases.rs"
-  # - "tests/integrity_probes.rs"
+  # Behavior tests (the golden cases / oracle) + BDD features + integration harness.
+  - "tests/**"
 
   # Hand-authored module documentation.
   - "docs/**"
