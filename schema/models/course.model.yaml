@@ -56,9 +56,9 @@ models:
         attributes: ["@exclude_from_foreign_key_check"]
         description: "# logical FK employee.Certification.id (cert granted on completion)"
 
-      is_active:
-        type: bool
-        attributes: ["@default(true)"]
+      status:
+        type: CourseStatus
+        attributes: ["@default(active)"]
         description: "Whether the course is bookable"
 
       metadata:
@@ -79,3 +79,12 @@ enums:
       - name: onsite
       - name: blended
       - name: self_paced
+
+  - name: CourseStatus
+    description: "Lifecycle status of a course"
+    variants:
+      - name: active
+        description: "Course is bookable"
+        default: true
+      - name: inactive
+        description: "Course is not bookable"

@@ -115,7 +115,7 @@ pub struct CourseDto {
     pub cost: Option<Decimal>,
     pub provider: Option<String>,
     pub certification_id: Option<Uuid>,
-    pub is_active: bool,
+    pub status: CourseStatus,
     pub metadata: serde_json::Value,
 }
 

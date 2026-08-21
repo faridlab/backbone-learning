@@ -20,6 +20,7 @@ use validator::Validate;
 use crate::domain::entity::Course;
 use crate::domain::entity::AuditMetadata;
 use crate::domain::entity::CourseFormat;
+use crate::domain::entity::CourseStatus;
 
 // =============================================================================
 // Create DTO
@@ -52,9 +53,7 @@ pub struct CreateCourseDto {
     pub provider: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "certification_id")]
     pub certification_id: Option<Uuid>,
-    #[cfg_attr(feature = "openapi", schema(example = true))]
-    #[serde(alias = "is_active")]
-    pub is_active: bool,
+    pub status: CourseStatus,
 }
 
 // =============================================================================
@@ -88,9 +87,7 @@ pub struct UpdateCourseDto {
     pub provider: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "certification_id")]
     pub certification_id: Option<Uuid>,
-    #[cfg_attr(feature = "openapi", schema(example = true))]
-    #[serde(alias = "is_active")]
-    pub is_active: bool,
+    pub status: CourseStatus,
 }
 
 // =============================================================================
@@ -127,14 +124,14 @@ pub struct PatchCourseDto {
     #[serde(skip_serializing_if = "Option::is_none", alias = "certification_id")]
     pub certification_id: Option<Uuid>,
     #[cfg_attr(feature = "openapi", schema(example = true))]
-    #[serde(skip_serializing_if = "Option::is_none", alias = "is_active")]
-    pub is_active: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<CourseStatus>,
 }
 
 impl PatchCourseDto {
     /// Check if any field is set
     pub fn has_changes(&self) -> bool {
-        self.company_id.is_some() || self.name.is_some() || self.description.is_some() || self.format.is_some() || self.duration_hours.is_some() || self.cost.is_some() || self.provider.is_some() || self.certification_id.is_some() || self.is_active.is_some()
+        self.company_id.is_some() || self.name.is_some() || self.description.is_some() || self.format.is_some() || self.duration_hours.is_some() || self.cost.is_some() || self.provider.is_some() || self.certification_id.is_some() || self.status.is_some()
     }
 }
 
@@ -163,7 +160,7 @@ pub struct CourseResponseDto {
     pub provider: Option<String>,
     pub certification_id: Option<Uuid>,
     #[cfg_attr(feature = "openapi", schema(example = true))]
-    pub is_active: bool,
+    pub status: CourseStatus,
     pub metadata: AuditMetadata,
 }
 
@@ -243,7 +240,7 @@ impl From<Course> for CourseResponseDto {
             cost: entity.cost,
             provider: entity.provider,
             certification_id: entity.certification_id,
-            is_active: entity.is_active,
+            status: entity.status,
             metadata: entity.metadata,
         }
     }
@@ -274,7 +271,7 @@ impl From<CreateCourseDto> for Course {
             cost: dto.cost,
             provider: dto.provider,
             certification_id: dto.certification_id,
-            is_active: dto.is_active,
+            status: dto.status,
             metadata: AuditMetadata::default(),
         }
     }
@@ -292,7 +289,7 @@ impl From<&Course> for CourseResponseDto {
             cost: entity.cost.clone(),
             provider: entity.provider.clone(),
             certification_id: entity.certification_id.clone(),
-            is_active: entity.is_active.clone(),
+            status: entity.status.clone(),
             metadata: entity.metadata.clone(),
         }
     }
@@ -314,7 +311,7 @@ impl backbone_core::ApplyUpdateDto<UpdateCourseDto> for Course {
         self.cost = dto.cost;
         self.provider = dto.provider;
         self.certification_id = dto.certification_id;
-        self.is_active = dto.is_active;
+        self.status = dto.status;
         Ok(self)
     }
 }

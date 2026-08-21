@@ -32,7 +32,7 @@ impl TestDataGenerator for CourseTestData {
             "cost": null,
             "provider": null,
             "certification_id": null,
-            "is_active": false,
+            "status": "inactive",
             "metadata": json!({}),
         })
     }
@@ -49,7 +49,7 @@ impl TestDataGenerator for CourseTestData {
             "cost": null,
             "provider": null,
             "certification_id": null,
-            "is_active": false,
+            "status": "inactive",
             "metadata": json!({}),
         })
     }

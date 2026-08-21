@@ -5,6 +5,7 @@ use uuid::Uuid;
 use rust_decimal::Decimal;
 
 use super::CourseFormat;
+use super::CourseStatus;
 use super::AuditMetadata;
 
 /// Strongly-typed ID for Course
@@ -59,7 +60,7 @@ pub struct Course {
     pub cost: Option<Decimal>,
     pub provider: Option<String>,
     pub certification_id: Option<Uuid>,
-    pub is_active: bool,
+    pub status: CourseStatus,
     #[serde(default)]
     #[sqlx(json)]
     pub metadata: AuditMetadata,
@@ -72,7 +73,7 @@ impl Course {
     }
 
     /// Create a new Course with required fields
-    pub fn new(company_id: Uuid, name: String, format: CourseFormat, is_active: bool) -> Self {
+    pub fn new(company_id: Uuid, name: String, format: CourseFormat, status: CourseStatus) -> Self {
         Self {
             id: Uuid::new_v4(),
             company_id,
@@ -83,7 +84,7 @@ impl Course {
             cost: None,
             provider: None,
             certification_id: None,
-            is_active,
+            status,
             metadata: AuditMetadata::default(),
         }
     }
@@ -205,8 +206,8 @@ impl Course {
                 "certification_id" => {
                     if let Ok(v) = serde_json::from_value(value) { self.certification_id = v; }
                 }
-                "is_active" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.is_active = v; }
+                "status" => {
+                    if let Ok(v) = serde_json::from_value(value) { self.status = v; }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -265,6 +266,7 @@ impl backbone_orm::EntityRepoMeta for Course {
         m.insert("company_id".to_string(), "uuid".to_string());
         m.insert("certification_id".to_string(), "uuid".to_string());
         m.insert("format".to_string(), "course_format".to_string());
+        m.insert("status".to_string(), "course_status".to_string());
         m
     }
     fn search_fields() -> &'static [&'static str] {
@@ -289,7 +291,7 @@ pub struct CourseBuilder {
     cost: Option<Decimal>,
     provider: Option<String>,
     certification_id: Option<Uuid>,
-    is_active: Option<bool>,
+    status: Option<CourseStatus>,
 }
 
 impl CourseBuilder {
@@ -341,9 +343,9 @@ impl CourseBuilder {
         self
     }
 
-    /// Set the is_active field (default: `true`)
-    pub fn is_active(mut self, value: bool) -> Self {
-        self.is_active = Some(value);
+    /// Set the status field (default: `CourseStatus::default()`)
+    pub fn status(mut self, value: CourseStatus) -> Self {
+        self.status = Some(value);
         self
     }
 
@@ -364,7 +366,7 @@ impl CourseBuilder {
             cost: self.cost,
             provider: self.provider,
             certification_id: self.certification_id,
-            is_active: self.is_active.unwrap_or(true),
+            status: self.status.unwrap_or(CourseStatus::default()),
             metadata: AuditMetadata::default(),
         })
     }
