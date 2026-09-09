@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
 
-use super::CompetencyCategory;
 use super::AuditMetadata;
+use super::CompetencyCategory;
 
 /// Strongly-typed ID for Competency
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -12,9 +12,15 @@ use super::AuditMetadata;
 pub struct CompetencyId(pub Uuid);
 
 impl CompetencyId {
-    pub fn new(id: Uuid) -> Self { Self(id) }
-    pub fn generate() -> Self { Self(Uuid::new_v4()) }
-    pub fn into_inner(self) -> Uuid { self.0 }
+    pub fn new(id: Uuid) -> Self {
+        Self(id)
+    }
+    pub fn generate() -> Self {
+        Self(Uuid::new_v4())
+    }
+    pub fn into_inner(self) -> Uuid {
+        self.0
+    }
 }
 
 impl std::fmt::Display for CompetencyId {
@@ -31,26 +37,33 @@ impl std::str::FromStr for CompetencyId {
 }
 
 impl From<Uuid> for CompetencyId {
-    fn from(id: Uuid) -> Self { Self(id) }
+    fn from(id: Uuid) -> Self {
+        Self(id)
+    }
 }
 
 impl From<CompetencyId> for Uuid {
-    fn from(id: CompetencyId) -> Self { id.0 }
+    fn from(id: CompetencyId) -> Self {
+        id.0
+    }
 }
 
 impl AsRef<Uuid> for CompetencyId {
-    fn as_ref(&self) -> &Uuid { &self.0 }
+    fn as_ref(&self) -> &Uuid {
+        &self.0
+    }
 }
 
 impl std::ops::Deref for CompetencyId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target { &self.0 }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Competency {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub name: String,
     pub category: Option<CompetencyCategory>,
     pub description: Option<String>,
@@ -66,10 +79,9 @@ impl Competency {
     }
 
     /// Create a new Competency with required fields
-    pub fn new(company_id: Uuid, name: String) -> Self {
+    pub fn new(name: String) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id,
             name,
             category: None,
             description: None,
@@ -127,7 +139,6 @@ impl Competency {
         self.metadata.deleted_by.as_ref()
     }
 
-
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -152,17 +163,20 @@ impl Competency {
     pub fn apply_patch(&mut self, fields: std::collections::HashMap<String, serde_json::Value>) {
         for (key, value) in fields {
             match key.as_str() {
-                "company_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.company_id = v; }
-                }
                 "name" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.name = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.name = v;
+                    }
                 }
                 "category" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.category = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.category = v;
+                    }
                 }
                 "description" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.description = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.description = v;
+                    }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -218,15 +232,11 @@ impl backbone_orm::EntityRepoMeta for Competency {
     fn column_types() -> std::collections::HashMap<String, String> {
         let mut m = std::collections::HashMap::new();
         m.insert("id".to_string(), "uuid".to_string());
-        m.insert("company_id".to_string(), "uuid".to_string());
         m.insert("category".to_string(), "competency_category".to_string());
         m
     }
     fn search_fields() -> &'static [&'static str] {
         &["name"]
-    }
-    fn company_field() -> Option<&'static str> {
-        Some("company_id")
     }
 }
 
@@ -236,19 +246,12 @@ impl backbone_orm::EntityRepoMeta for Competency {
 /// System fields (id, metadata, timestamps) are auto-initialized.
 #[derive(Debug, Clone, Default)]
 pub struct CompetencyBuilder {
-    company_id: Option<Uuid>,
     name: Option<String>,
     category: Option<CompetencyCategory>,
     description: Option<String>,
 }
 
 impl CompetencyBuilder {
-    /// Set the company_id field (required)
-    pub fn company_id(mut self, value: Uuid) -> Self {
-        self.company_id = Some(value);
-        self
-    }
-
     /// Set the name field (required)
     pub fn name(mut self, value: String) -> Self {
         self.name = Some(value);
@@ -271,12 +274,10 @@ impl CompetencyBuilder {
     ///
     /// Returns Err if any required field without a default is missing.
     pub fn build(self) -> Result<Competency, String> {
-        let company_id = self.company_id.ok_or_else(|| "company_id is required".to_string())?;
         let name = self.name.ok_or_else(|| "name is required".to_string())?;
 
         Ok(Competency {
             id: Uuid::new_v4(),
-            company_id,
             name,
             category: self.category,
             description: self.description,

@@ -1,11 +1,11 @@
-use chrono::{DateTime, Utc, NaiveDate};
+use chrono::{DateTime, NaiveDate, Utc};
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
-use rust_decimal::Decimal;
 
-use super::EnrollmentStatus;
 use super::AuditMetadata;
+use super::EnrollmentStatus;
 
 /// Strongly-typed ID for CourseEnrollment
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -13,9 +13,15 @@ use super::AuditMetadata;
 pub struct CourseEnrollmentId(pub Uuid);
 
 impl CourseEnrollmentId {
-    pub fn new(id: Uuid) -> Self { Self(id) }
-    pub fn generate() -> Self { Self(Uuid::new_v4()) }
-    pub fn into_inner(self) -> Uuid { self.0 }
+    pub fn new(id: Uuid) -> Self {
+        Self(id)
+    }
+    pub fn generate() -> Self {
+        Self(Uuid::new_v4())
+    }
+    pub fn into_inner(self) -> Uuid {
+        self.0
+    }
 }
 
 impl std::fmt::Display for CourseEnrollmentId {
@@ -32,26 +38,33 @@ impl std::str::FromStr for CourseEnrollmentId {
 }
 
 impl From<Uuid> for CourseEnrollmentId {
-    fn from(id: Uuid) -> Self { Self(id) }
+    fn from(id: Uuid) -> Self {
+        Self(id)
+    }
 }
 
 impl From<CourseEnrollmentId> for Uuid {
-    fn from(id: CourseEnrollmentId) -> Self { id.0 }
+    fn from(id: CourseEnrollmentId) -> Self {
+        id.0
+    }
 }
 
 impl AsRef<Uuid> for CourseEnrollmentId {
-    fn as_ref(&self) -> &Uuid { &self.0 }
+    fn as_ref(&self) -> &Uuid {
+        &self.0
+    }
 }
 
 impl std::ops::Deref for CourseEnrollmentId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target { &self.0 }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct CourseEnrollment {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub course_id: Uuid,
     pub employee_id: Uuid,
     pub status: EnrollmentStatus,
@@ -70,10 +83,14 @@ impl CourseEnrollment {
     }
 
     /// Create a new CourseEnrollment with required fields
-    pub fn new(company_id: Uuid, course_id: Uuid, employee_id: Uuid, status: EnrollmentStatus, enrolled_at: NaiveDate) -> Self {
+    pub fn new(
+        course_id: Uuid,
+        employee_id: Uuid,
+        status: EnrollmentStatus,
+        enrolled_at: NaiveDate,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id,
             course_id,
             employee_id,
             status,
@@ -139,7 +156,6 @@ impl CourseEnrollment {
         &self.status
     }
 
-
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -164,26 +180,35 @@ impl CourseEnrollment {
     pub fn apply_patch(&mut self, fields: std::collections::HashMap<String, serde_json::Value>) {
         for (key, value) in fields {
             match key.as_str() {
-                "company_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.company_id = v; }
-                }
                 "course_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.course_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.course_id = v;
+                    }
                 }
                 "employee_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.employee_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.employee_id = v;
+                    }
                 }
                 "status" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.status = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.status = v;
+                    }
                 }
                 "enrolled_at" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.enrolled_at = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.enrolled_at = v;
+                    }
                 }
                 "completed_at" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.completed_at = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.completed_at = v;
+                    }
                 }
                 "score" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.score = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.score = v;
+                    }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -239,7 +264,6 @@ impl backbone_orm::EntityRepoMeta for CourseEnrollment {
     fn column_types() -> std::collections::HashMap<String, String> {
         let mut m = std::collections::HashMap::new();
         m.insert("id".to_string(), "uuid".to_string());
-        m.insert("company_id".to_string(), "uuid".to_string());
         m.insert("course_id".to_string(), "uuid".to_string());
         m.insert("employee_id".to_string(), "uuid".to_string());
         m.insert("status".to_string(), "enrollment_status".to_string());
@@ -247,9 +271,6 @@ impl backbone_orm::EntityRepoMeta for CourseEnrollment {
     }
     fn search_fields() -> &'static [&'static str] {
         &[]
-    }
-    fn company_field() -> Option<&'static str> {
-        Some("company_id")
     }
 }
 
@@ -259,7 +280,6 @@ impl backbone_orm::EntityRepoMeta for CourseEnrollment {
 /// System fields (id, metadata, timestamps) are auto-initialized.
 #[derive(Debug, Clone, Default)]
 pub struct CourseEnrollmentBuilder {
-    company_id: Option<Uuid>,
     course_id: Option<Uuid>,
     employee_id: Option<Uuid>,
     status: Option<EnrollmentStatus>,
@@ -269,12 +289,6 @@ pub struct CourseEnrollmentBuilder {
 }
 
 impl CourseEnrollmentBuilder {
-    /// Set the company_id field (required)
-    pub fn company_id(mut self, value: Uuid) -> Self {
-        self.company_id = Some(value);
-        self
-    }
-
     /// Set the course_id field (required)
     pub fn course_id(mut self, value: Uuid) -> Self {
         self.course_id = Some(value);
@@ -315,14 +329,18 @@ impl CourseEnrollmentBuilder {
     ///
     /// Returns Err if any required field without a default is missing.
     pub fn build(self) -> Result<CourseEnrollment, String> {
-        let company_id = self.company_id.ok_or_else(|| "company_id is required".to_string())?;
-        let course_id = self.course_id.ok_or_else(|| "course_id is required".to_string())?;
-        let employee_id = self.employee_id.ok_or_else(|| "employee_id is required".to_string())?;
-        let enrolled_at = self.enrolled_at.ok_or_else(|| "enrolled_at is required".to_string())?;
+        let course_id = self
+            .course_id
+            .ok_or_else(|| "course_id is required".to_string())?;
+        let employee_id = self
+            .employee_id
+            .ok_or_else(|| "employee_id is required".to_string())?;
+        let enrolled_at = self
+            .enrolled_at
+            .ok_or_else(|| "enrolled_at is required".to_string())?;
 
         Ok(CourseEnrollment {
             id: Uuid::new_v4(),
-            company_id,
             course_id,
             employee_id,
             status: self.status.unwrap_or(EnrollmentStatus::default()),

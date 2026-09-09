@@ -5,10 +5,10 @@
 //! DTOs provide a clean separation between domain entities and API
 //! representations, with validation and OpenAPI documentation support.
 
+use chrono::{DateTime, NaiveDate, Utc};
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use chrono::{DateTime, Utc, NaiveDate};
-use rust_decimal::Decimal;
 
 #[cfg(feature = "openapi")]
 #[cfg(feature = "openapi")]
@@ -17,8 +17,8 @@ use utoipa::ToSchema;
 #[cfg(feature = "validation")]
 use validator::Validate;
 
-use crate::domain::entity::EmployeeSkill;
 use crate::domain::entity::AuditMetadata;
+use crate::domain::entity::EmployeeSkill;
 use crate::domain::entity::ProficiencyLevel;
 use crate::domain::entity::SkillVerification;
 
@@ -35,22 +35,37 @@ use crate::domain::entity::SkillVerification;
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct CreateEmployeeSkillDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(alias = "company_id")]
-    pub company_id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     #[serde(alias = "skill_id")]
     pub skill_id: Uuid,
     pub proficiency: ProficiencyLevel,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "years_experience")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "years_experience"
+    )]
     pub years_experience: Option<Decimal>,
     pub verification: SkillVerification,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "verified_by")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "verified_by"
+    )]
     pub verified_by: Option<Uuid>,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "last_used_at")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "last_used_at"
+    )]
     pub last_used_at: Option<NaiveDate>,
 }
 
@@ -67,22 +82,37 @@ pub struct CreateEmployeeSkillDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateEmployeeSkillDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(alias = "company_id")]
-    pub company_id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     #[serde(alias = "skill_id")]
     pub skill_id: Uuid,
     pub proficiency: ProficiencyLevel,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "years_experience")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "years_experience"
+    )]
     pub years_experience: Option<Decimal>,
     pub verification: SkillVerification,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "verified_by")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "verified_by"
+    )]
     pub verified_by: Option<Uuid>,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "last_used_at")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "last_used_at"
+    )]
     pub last_used_at: Option<NaiveDate>,
 }
 
@@ -99,13 +129,16 @@ pub struct UpdateEmployeeSkillDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct PatchEmployeeSkillDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(skip_serializing_if = "Option::is_none", alias = "company_id")]
-    pub company_id: Option<Uuid>,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     #[serde(skip_serializing_if = "Option::is_none", alias = "employee_id")]
     pub employee_id: Option<Uuid>,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     #[serde(skip_serializing_if = "Option::is_none", alias = "skill_id")]
     pub skill_id: Option<Uuid>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -123,7 +156,13 @@ pub struct PatchEmployeeSkillDto {
 impl PatchEmployeeSkillDto {
     /// Check if any field is set
     pub fn has_changes(&self) -> bool {
-        self.company_id.is_some() || self.employee_id.is_some() || self.skill_id.is_some() || self.proficiency.is_some() || self.years_experience.is_some() || self.verification.is_some() || self.verified_by.is_some() || self.last_used_at.is_some()
+        self.employee_id.is_some()
+            || self.skill_id.is_some()
+            || self.proficiency.is_some()
+            || self.years_experience.is_some()
+            || self.verification.is_some()
+            || self.verified_by.is_some()
+            || self.last_used_at.is_some()
     }
 }
 
@@ -139,13 +178,20 @@ impl PatchEmployeeSkillDto {
 #[cfg_attr(feature = "openapi", derive(ToSchema))]
 #[serde(rename_all = "camelCase")]
 pub struct EmployeeSkillResponseDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     pub id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    pub company_id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     pub employee_id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     pub skill_id: Uuid,
     pub proficiency: ProficiencyLevel,
     pub years_experience: Option<Decimal>,
@@ -209,7 +255,6 @@ impl EmployeeSkillListResponseDto {
 #[serde(rename_all = "camelCase")]
 pub struct EmployeeSkillSummaryDto {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub employee_id: Uuid,
     pub skill_id: Uuid,
     pub created_at: Option<DateTime<Utc>>,
@@ -223,7 +268,6 @@ impl From<EmployeeSkill> for EmployeeSkillResponseDto {
     fn from(entity: EmployeeSkill) -> Self {
         Self {
             id: entity.id,
-            company_id: entity.company_id,
             employee_id: entity.employee_id,
             skill_id: entity.skill_id,
             proficiency: entity.proficiency,
@@ -241,7 +285,6 @@ impl From<EmployeeSkill> for EmployeeSkillSummaryDto {
         let created_at = backbone_core::PersistentEntity::created_at(&entity);
         Self {
             id: entity.id,
-            company_id: entity.company_id,
             employee_id: entity.employee_id,
             skill_id: entity.skill_id,
             created_at,
@@ -253,7 +296,6 @@ impl From<CreateEmployeeSkillDto> for EmployeeSkill {
     fn from(dto: CreateEmployeeSkillDto) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id: dto.company_id,
             employee_id: dto.employee_id,
             skill_id: dto.skill_id,
             proficiency: dto.proficiency,
@@ -270,7 +312,6 @@ impl From<&EmployeeSkill> for EmployeeSkillResponseDto {
     fn from(entity: &EmployeeSkill) -> Self {
         Self {
             id: entity.id.clone(),
-            company_id: entity.company_id.clone(),
             employee_id: entity.employee_id.clone(),
             skill_id: entity.skill_id.clone(),
             proficiency: entity.proficiency.clone(),
@@ -291,7 +332,6 @@ impl backbone_core::FromCreateDto<CreateEmployeeSkillDto> for EmployeeSkill {
 
 impl backbone_core::ApplyUpdateDto<UpdateEmployeeSkillDto> for EmployeeSkill {
     fn apply_update(mut self, dto: UpdateEmployeeSkillDto) -> backbone_core::ServiceResult<Self> {
-        self.company_id = dto.company_id;
         self.employee_id = dto.employee_id;
         self.skill_id = dto.skill_id;
         self.proficiency = dto.proficiency;
@@ -311,4 +351,3 @@ impl backbone_core::ApplyUpdateDto<UpdateEmployeeSkillDto> for EmployeeSkill {
 // Add custom DTOs specific to EmployeeSkill here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
-

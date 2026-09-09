@@ -1,8 +1,8 @@
-use chrono::{DateTime, Utc, NaiveDate};
+use super::AuditMetadata;
+use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
-use super::AuditMetadata;
 
 /// Strongly-typed ID for EmployeeCompetency
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -10,9 +10,15 @@ use super::AuditMetadata;
 pub struct EmployeeCompetencyId(pub Uuid);
 
 impl EmployeeCompetencyId {
-    pub fn new(id: Uuid) -> Self { Self(id) }
-    pub fn generate() -> Self { Self(Uuid::new_v4()) }
-    pub fn into_inner(self) -> Uuid { self.0 }
+    pub fn new(id: Uuid) -> Self {
+        Self(id)
+    }
+    pub fn generate() -> Self {
+        Self(Uuid::new_v4())
+    }
+    pub fn into_inner(self) -> Uuid {
+        self.0
+    }
 }
 
 impl std::fmt::Display for EmployeeCompetencyId {
@@ -29,26 +35,33 @@ impl std::str::FromStr for EmployeeCompetencyId {
 }
 
 impl From<Uuid> for EmployeeCompetencyId {
-    fn from(id: Uuid) -> Self { Self(id) }
+    fn from(id: Uuid) -> Self {
+        Self(id)
+    }
 }
 
 impl From<EmployeeCompetencyId> for Uuid {
-    fn from(id: EmployeeCompetencyId) -> Self { id.0 }
+    fn from(id: EmployeeCompetencyId) -> Self {
+        id.0
+    }
 }
 
 impl AsRef<Uuid> for EmployeeCompetencyId {
-    fn as_ref(&self) -> &Uuid { &self.0 }
+    fn as_ref(&self) -> &Uuid {
+        &self.0
+    }
 }
 
 impl std::ops::Deref for EmployeeCompetencyId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target { &self.0 }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct EmployeeCompetency {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub employee_id: Uuid,
     pub competency_id: Uuid,
     pub level: i32,
@@ -65,10 +78,9 @@ impl EmployeeCompetency {
     }
 
     /// Create a new EmployeeCompetency with required fields
-    pub fn new(company_id: Uuid, employee_id: Uuid, competency_id: Uuid, level: i32) -> Self {
+    pub fn new(employee_id: Uuid, competency_id: Uuid, level: i32) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id,
             employee_id,
             competency_id,
             level,
@@ -127,7 +139,6 @@ impl EmployeeCompetency {
         self.metadata.deleted_by.as_ref()
     }
 
-
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -146,20 +157,25 @@ impl EmployeeCompetency {
     pub fn apply_patch(&mut self, fields: std::collections::HashMap<String, serde_json::Value>) {
         for (key, value) in fields {
             match key.as_str() {
-                "company_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.company_id = v; }
-                }
                 "employee_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.employee_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.employee_id = v;
+                    }
                 }
                 "competency_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.competency_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.competency_id = v;
+                    }
                 }
                 "level" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.level = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.level = v;
+                    }
                 }
                 "assessed_at" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.assessed_at = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.assessed_at = v;
+                    }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -215,16 +231,12 @@ impl backbone_orm::EntityRepoMeta for EmployeeCompetency {
     fn column_types() -> std::collections::HashMap<String, String> {
         let mut m = std::collections::HashMap::new();
         m.insert("id".to_string(), "uuid".to_string());
-        m.insert("company_id".to_string(), "uuid".to_string());
         m.insert("employee_id".to_string(), "uuid".to_string());
         m.insert("competency_id".to_string(), "uuid".to_string());
         m
     }
     fn search_fields() -> &'static [&'static str] {
         &[]
-    }
-    fn company_field() -> Option<&'static str> {
-        Some("company_id")
     }
 }
 
@@ -234,7 +246,6 @@ impl backbone_orm::EntityRepoMeta for EmployeeCompetency {
 /// System fields (id, metadata, timestamps) are auto-initialized.
 #[derive(Debug, Clone, Default)]
 pub struct EmployeeCompetencyBuilder {
-    company_id: Option<Uuid>,
     employee_id: Option<Uuid>,
     competency_id: Option<Uuid>,
     level: Option<i32>,
@@ -242,12 +253,6 @@ pub struct EmployeeCompetencyBuilder {
 }
 
 impl EmployeeCompetencyBuilder {
-    /// Set the company_id field (required)
-    pub fn company_id(mut self, value: Uuid) -> Self {
-        self.company_id = Some(value);
-        self
-    }
-
     /// Set the employee_id field (required)
     pub fn employee_id(mut self, value: Uuid) -> Self {
         self.employee_id = Some(value);
@@ -276,13 +281,15 @@ impl EmployeeCompetencyBuilder {
     ///
     /// Returns Err if any required field without a default is missing.
     pub fn build(self) -> Result<EmployeeCompetency, String> {
-        let company_id = self.company_id.ok_or_else(|| "company_id is required".to_string())?;
-        let employee_id = self.employee_id.ok_or_else(|| "employee_id is required".to_string())?;
-        let competency_id = self.competency_id.ok_or_else(|| "competency_id is required".to_string())?;
+        let employee_id = self
+            .employee_id
+            .ok_or_else(|| "employee_id is required".to_string())?;
+        let competency_id = self
+            .competency_id
+            .ok_or_else(|| "competency_id is required".to_string())?;
 
         Ok(EmployeeCompetency {
             id: Uuid::new_v4(),
-            company_id,
             employee_id,
             competency_id,
             level: self.level.unwrap_or(3),

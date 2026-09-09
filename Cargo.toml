@@ -61,12 +61,16 @@ tonic = "0.12"
 prost = "0.13"
 prost-types = "0.13"
 
+# OpenAPI schema generation — derives `utoipa::ToSchema` on the HTTP DTOs
+# when the `openapi` feature is on (same shape as backbone-core).
+utoipa = { version = "5", features = ["uuid", "chrono", "decimal"], optional = true }
+
 [features]
 default = []
 events = []
 auth = []
 grpc = []
-openapi = []
+openapi = ["dep:utoipa"]
 validation = []
 
 [build-dependencies]

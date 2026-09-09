@@ -5,8 +5,8 @@
 //! This trait defines the repository contract for the Competency aggregate.
 //! Implementation is in the infrastructure layer.
 
-use async_trait::async_trait;
 use anyhow::Result;
+use async_trait::async_trait;
 use uuid::Uuid;
 
 use crate::domain::entity::{Competency, CompetencyCategory};
@@ -44,7 +44,6 @@ pub struct CompetencyPaginatedResult {
 /// Filter parameters for list queries
 #[derive(Debug, Clone, Default)]
 pub struct CompetencyFilter {
-    pub company_id: Option<Uuid>,
     pub name: Option<String>,
     pub category: Option<CompetencyCategory>,
     pub description: Option<String>,
@@ -53,7 +52,7 @@ pub struct CompetencyFilter {
 impl CompetencyFilter {
     /// Check if any filter is set
     pub fn has_filters(&self) -> bool {
-        self.company_id.is_some() || self.name.is_some() || self.category.is_some() || self.description.is_some()
+        self.name.is_some() || self.category.is_some() || self.description.is_some()
     }
 }
 
@@ -63,7 +62,6 @@ impl CompetencyFilter {
 /// Implementations should be in the infrastructure layer.
 #[async_trait]
 pub trait CompetencyRepository: Send + Sync {
-
     // =========================================================================
     // Core CRUD Operations
     // =========================================================================
@@ -91,7 +89,11 @@ pub trait CompetencyRepository: Send + Sync {
     async fn list(&self, params: CompetencyPaginationParams) -> Result<CompetencyPaginatedResult>;
 
     /// List competency with pagination and filters
-    async fn list_with_filters(&self, params: CompetencyPaginationParams, filters: CompetencyFilter) -> Result<CompetencyPaginatedResult>;
+    async fn list_with_filters(
+        &self,
+        params: CompetencyPaginationParams,
+        filters: CompetencyFilter,
+    ) -> Result<CompetencyPaginatedResult>;
 
     /// Count all competency entities
     async fn count(&self) -> Result<u64>;
@@ -113,7 +115,10 @@ pub trait CompetencyRepository: Send + Sync {
     async fn restore(&self, id: &str) -> Result<Option<Competency>>;
 
     /// List soft-deleted competency entities
-    async fn list_deleted(&self, params: CompetencyPaginationParams) -> Result<CompetencyPaginatedResult>;
+    async fn list_deleted(
+        &self,
+        params: CompetencyPaginationParams,
+    ) -> Result<CompetencyPaginatedResult>;
 
     /// Empty trash (permanently delete all soft-deleted entities)
     async fn empty_trash(&self) -> Result<u64>;

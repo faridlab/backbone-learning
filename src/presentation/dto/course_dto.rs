@@ -5,10 +5,10 @@
 //! DTOs provide a clean separation between domain entities and API
 //! representations, with validation and OpenAPI documentation support.
 
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[cfg(feature = "openapi")]
 #[cfg(feature = "openapi")]
@@ -17,8 +17,8 @@ use utoipa::ToSchema;
 #[cfg(feature = "validation")]
 use validator::Validate;
 
-use crate::domain::entity::Course;
 use crate::domain::entity::AuditMetadata;
+use crate::domain::entity::Course;
 use crate::domain::entity::CourseFormat;
 use crate::domain::entity::CourseStatus;
 
@@ -35,23 +35,28 @@ use crate::domain::entity::CourseStatus;
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct CreateCourseDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(alias = "company_id")]
-    pub company_id: Uuid,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     pub name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     pub format: CourseFormat,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "duration_hours")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "duration_hours"
+    )]
     pub duration_hours: Option<Decimal>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cost: Option<Decimal>,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub provider: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "certification_id")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "certification_id"
+    )]
     pub certification_id: Option<Uuid>,
     pub status: CourseStatus,
 }
@@ -69,23 +74,28 @@ pub struct CreateCourseDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateCourseDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(alias = "company_id")]
-    pub company_id: Uuid,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     pub name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     pub format: CourseFormat,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "duration_hours")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "duration_hours"
+    )]
     pub duration_hours: Option<Decimal>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cost: Option<Decimal>,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub provider: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none", alias = "certification_id")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        alias = "certification_id"
+    )]
     pub certification_id: Option<Uuid>,
     pub status: CourseStatus,
 }
@@ -103,9 +113,6 @@ pub struct UpdateCourseDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct PatchCourseDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(skip_serializing_if = "Option::is_none", alias = "company_id")]
-    pub company_id: Option<Uuid>,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,7 +138,14 @@ pub struct PatchCourseDto {
 impl PatchCourseDto {
     /// Check if any field is set
     pub fn has_changes(&self) -> bool {
-        self.company_id.is_some() || self.name.is_some() || self.description.is_some() || self.format.is_some() || self.duration_hours.is_some() || self.cost.is_some() || self.provider.is_some() || self.certification_id.is_some() || self.status.is_some()
+        self.name.is_some()
+            || self.description.is_some()
+            || self.format.is_some()
+            || self.duration_hours.is_some()
+            || self.cost.is_some()
+            || self.provider.is_some()
+            || self.certification_id.is_some()
+            || self.status.is_some()
     }
 }
 
@@ -147,10 +161,11 @@ impl PatchCourseDto {
 #[cfg_attr(feature = "openapi", derive(ToSchema))]
 #[serde(rename_all = "camelCase")]
 pub struct CourseResponseDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     pub id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    pub company_id: Uuid,
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     pub name: String,
     pub description: Option<String>,
@@ -218,7 +233,6 @@ impl CourseListResponseDto {
 #[serde(rename_all = "camelCase")]
 pub struct CourseSummaryDto {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub name: String,
     pub description: Option<String>,
     pub created_at: Option<DateTime<Utc>>,
@@ -232,7 +246,6 @@ impl From<Course> for CourseResponseDto {
     fn from(entity: Course) -> Self {
         Self {
             id: entity.id,
-            company_id: entity.company_id,
             name: entity.name,
             description: entity.description,
             format: entity.format,
@@ -251,7 +264,6 @@ impl From<Course> for CourseSummaryDto {
         let created_at = backbone_core::PersistentEntity::created_at(&entity);
         Self {
             id: entity.id,
-            company_id: entity.company_id,
             name: entity.name,
             description: entity.description,
             created_at,
@@ -263,7 +275,6 @@ impl From<CreateCourseDto> for Course {
     fn from(dto: CreateCourseDto) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id: dto.company_id,
             name: dto.name,
             description: dto.description,
             format: dto.format,
@@ -281,7 +292,6 @@ impl From<&Course> for CourseResponseDto {
     fn from(entity: &Course) -> Self {
         Self {
             id: entity.id.clone(),
-            company_id: entity.company_id.clone(),
             name: entity.name.clone(),
             description: entity.description.clone(),
             format: entity.format.clone(),
@@ -303,7 +313,6 @@ impl backbone_core::FromCreateDto<CreateCourseDto> for Course {
 
 impl backbone_core::ApplyUpdateDto<UpdateCourseDto> for Course {
     fn apply_update(mut self, dto: UpdateCourseDto) -> backbone_core::ServiceResult<Self> {
-        self.company_id = dto.company_id;
         self.name = dto.name;
         self.description = dto.description;
         self.format = dto.format;
@@ -324,4 +333,3 @@ impl backbone_core::ApplyUpdateDto<UpdateCourseDto> for Course {
 // Add custom DTOs specific to Course here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
-

@@ -2227,14 +2227,10 @@ components:
       type: object
       required:
         - id
-        - company_id
         - name
         - metadata
       properties:
         id:
-          type: string
-          format: uuid
-        company_id:
           type: string
           format: uuid
         name:
@@ -2265,13 +2261,9 @@ components:
     CreateCompetencyRequest:
       type: object
       required:
-        - company_id
         - name
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 180
@@ -2287,13 +2279,9 @@ components:
     UpdateCompetencyRequest:
       type: object
       required:
-        - company_id
         - name
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 180
@@ -2309,9 +2297,6 @@ components:
     PatchCompetencyRequest:
       type: object
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 180
@@ -2338,16 +2323,12 @@ components:
       type: object
       required:
         - id
-        - company_id
         - name
         - format
         - status
         - metadata
       properties:
         id:
-          type: string
-          format: uuid
-        company_id:
           type: string
           format: uuid
         name:
@@ -2393,15 +2374,11 @@ components:
     CreateCourseRequest:
       type: object
       required:
-        - company_id
         - name
         - format
         - status
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 180
@@ -2432,15 +2409,11 @@ components:
     UpdateCourseRequest:
       type: object
       required:
-        - company_id
         - name
         - format
         - status
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 180
@@ -2471,9 +2444,6 @@ components:
     PatchCourseRequest:
       type: object
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 180
@@ -2515,7 +2485,6 @@ components:
       type: object
       required:
         - id
-        - company_id
         - course_id
         - employee_id
         - status
@@ -2523,9 +2492,6 @@ components:
         - metadata
       properties:
         id:
-          type: string
-          format: uuid
-        company_id:
           type: string
           format: uuid
         course_id:
@@ -2565,16 +2531,12 @@ components:
     CreateCourseEnrollmentRequest:
       type: object
       required:
-        - company_id
         - course_id
         - employee_id
         - status
         - enrolled_at
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         course_id:
           type: string
           format: uuid
@@ -2599,16 +2561,12 @@ components:
     UpdateCourseEnrollmentRequest:
       type: object
       required:
-        - company_id
         - course_id
         - employee_id
         - status
         - enrolled_at
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         course_id:
           type: string
           format: uuid
@@ -2633,9 +2591,6 @@ components:
     PatchCourseEnrollmentRequest:
       type: object
       properties:
-        company_id:
-          type: string
-          format: uuid
         course_id:
           type: string
           format: uuid
@@ -2671,16 +2626,12 @@ components:
       type: object
       required:
         - id
-        - company_id
         - employee_id
         - competency_id
         - level
         - metadata
       properties:
         id:
-          type: string
-          format: uuid
-        company_id:
           type: string
           format: uuid
         employee_id:
@@ -2715,15 +2666,11 @@ components:
     CreateEmployeeCompetencyRequest:
       type: object
       required:
-        - company_id
         - employee_id
         - competency_id
         - level
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         employee_id:
           type: string
           format: uuid
@@ -2743,15 +2690,11 @@ components:
     UpdateEmployeeCompetencyRequest:
       type: object
       required:
-        - company_id
         - employee_id
         - competency_id
         - level
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         employee_id:
           type: string
           format: uuid
@@ -2771,9 +2714,6 @@ components:
     PatchEmployeeCompetencyRequest:
       type: object
       properties:
-        company_id:
-          type: string
-          format: uuid
         employee_id:
           type: string
           format: uuid
@@ -2804,7 +2744,6 @@ components:
       type: object
       required:
         - id
-        - company_id
         - employee_id
         - skill_id
         - proficiency
@@ -2812,9 +2751,6 @@ components:
         - metadata
       properties:
         id:
-          type: string
-          format: uuid
-        company_id:
           type: string
           format: uuid
         employee_id:
@@ -2857,16 +2793,12 @@ components:
     CreateEmployeeSkillRequest:
       type: object
       required:
-        - company_id
         - employee_id
         - skill_id
         - proficiency
         - verification
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         employee_id:
           type: string
           format: uuid
@@ -2894,16 +2826,12 @@ components:
     UpdateEmployeeSkillRequest:
       type: object
       required:
-        - company_id
         - employee_id
         - skill_id
         - proficiency
         - verification
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         employee_id:
           type: string
           format: uuid
@@ -2931,9 +2859,6 @@ components:
     PatchEmployeeSkillRequest:
       type: object
       properties:
-        company_id:
-          type: string
-          format: uuid
         employee_id:
           type: string
           format: uuid
@@ -2972,14 +2897,10 @@ components:
       type: object
       required:
         - id
-        - company_id
         - name
         - metadata
       properties:
         id:
-          type: string
-          format: uuid
-        company_id:
           type: string
           format: uuid
         name:
@@ -3010,13 +2931,9 @@ components:
     CreateSkillRequest:
       type: object
       required:
-        - company_id
         - name
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 120
@@ -3032,13 +2949,9 @@ components:
     UpdateSkillRequest:
       type: object
       required:
-        - company_id
         - name
         - metadata
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 120
@@ -3054,9 +2967,6 @@ components:
     PatchSkillRequest:
       type: object
       properties:
-        company_id:
-          type: string
-          format: uuid
         name:
           type: string
           maxLength: 120

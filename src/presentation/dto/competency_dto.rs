@@ -5,9 +5,9 @@
 //! DTOs provide a clean separation between domain entities and API
 //! representations, with validation and OpenAPI documentation support.
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
 #[cfg(feature = "openapi")]
 #[cfg(feature = "openapi")]
@@ -16,8 +16,8 @@ use utoipa::ToSchema;
 #[cfg(feature = "validation")]
 use validator::Validate;
 
-use crate::domain::entity::Competency;
 use crate::domain::entity::AuditMetadata;
+use crate::domain::entity::Competency;
 use crate::domain::entity::CompetencyCategory;
 
 // =============================================================================
@@ -33,9 +33,6 @@ use crate::domain::entity::CompetencyCategory;
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct CreateCompetencyDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(alias = "company_id")]
-    pub company_id: Uuid,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     pub name: String,
@@ -58,9 +55,6 @@ pub struct CreateCompetencyDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateCompetencyDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(alias = "company_id")]
-    pub company_id: Uuid,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     pub name: String,
@@ -83,9 +77,6 @@ pub struct UpdateCompetencyDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct PatchCompetencyDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    #[serde(skip_serializing_if = "Option::is_none", alias = "company_id")]
-    pub company_id: Option<Uuid>,
     #[cfg_attr(feature = "validation", validate(length(max = 180)))]
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -99,7 +90,7 @@ pub struct PatchCompetencyDto {
 impl PatchCompetencyDto {
     /// Check if any field is set
     pub fn has_changes(&self) -> bool {
-        self.company_id.is_some() || self.name.is_some() || self.category.is_some() || self.description.is_some()
+        self.name.is_some() || self.category.is_some() || self.description.is_some()
     }
 }
 
@@ -115,10 +106,11 @@ impl PatchCompetencyDto {
 #[cfg_attr(feature = "openapi", derive(ToSchema))]
 #[serde(rename_all = "camelCase")]
 pub struct CompetencyResponseDto {
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
+    #[cfg_attr(
+        feature = "openapi",
+        schema(example = "550e8400-e29b-41d4-a716-446655440000")
+    )]
     pub id: Uuid,
-    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
-    pub company_id: Uuid,
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     pub name: String,
     pub category: Option<CompetencyCategory>,
@@ -180,7 +172,6 @@ impl CompetencyListResponseDto {
 #[serde(rename_all = "camelCase")]
 pub struct CompetencySummaryDto {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub name: String,
     pub category: Option<CompetencyCategory>,
     pub created_at: Option<DateTime<Utc>>,
@@ -194,7 +185,6 @@ impl From<Competency> for CompetencyResponseDto {
     fn from(entity: Competency) -> Self {
         Self {
             id: entity.id,
-            company_id: entity.company_id,
             name: entity.name,
             category: entity.category,
             description: entity.description,
@@ -208,7 +198,6 @@ impl From<Competency> for CompetencySummaryDto {
         let created_at = backbone_core::PersistentEntity::created_at(&entity);
         Self {
             id: entity.id,
-            company_id: entity.company_id,
             name: entity.name,
             category: entity.category,
             created_at,
@@ -220,7 +209,6 @@ impl From<CreateCompetencyDto> for Competency {
     fn from(dto: CreateCompetencyDto) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id: dto.company_id,
             name: dto.name,
             category: dto.category,
             description: dto.description,
@@ -233,7 +221,6 @@ impl From<&Competency> for CompetencyResponseDto {
     fn from(entity: &Competency) -> Self {
         Self {
             id: entity.id.clone(),
-            company_id: entity.company_id.clone(),
             name: entity.name.clone(),
             category: entity.category.clone(),
             description: entity.description.clone(),
@@ -250,7 +237,6 @@ impl backbone_core::FromCreateDto<CreateCompetencyDto> for Competency {
 
 impl backbone_core::ApplyUpdateDto<UpdateCompetencyDto> for Competency {
     fn apply_update(mut self, dto: UpdateCompetencyDto) -> backbone_core::ServiceResult<Self> {
-        self.company_id = dto.company_id;
         self.name = dto.name;
         self.category = dto.category;
         self.description = dto.description;
@@ -266,4 +252,3 @@ impl backbone_core::ApplyUpdateDto<UpdateCompetencyDto> for Competency {
 // Add custom DTOs specific to Competency here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
-

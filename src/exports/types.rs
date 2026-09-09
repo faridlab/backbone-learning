@@ -5,11 +5,11 @@
 //! These DTOs are the ONLY types other modules should use.
 //! They are decoupled from internal domain entities.
 
+use crate::domain::entity::*;
+use chrono::{DateTime, NaiveDate, Utc};
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use chrono::{DateTime, Utc, NaiveDate};
-use rust_decimal::Decimal;
-use crate::domain::entity::*;
 
 // ============================================================================
 // COMPETENCY TYPES
@@ -49,7 +49,6 @@ impl From<CompetencyId> for Uuid {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CompetencyDto {
     pub id: CompetencyId,
-    pub company_id: Uuid,
     pub name: String,
     pub category: Option<CompetencyCategory>,
     pub description: Option<String>,
@@ -107,7 +106,6 @@ impl From<CourseId> for Uuid {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CourseDto {
     pub id: CourseId,
-    pub company_id: Uuid,
     pub name: String,
     pub description: Option<String>,
     pub format: CourseFormat,
@@ -170,7 +168,6 @@ impl From<CourseEnrollmentId> for Uuid {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CourseEnrollmentDto {
     pub id: CourseEnrollmentId,
-    pub company_id: Uuid,
     pub course_id: Uuid,
     pub employee_id: Uuid,
     pub status: EnrollmentStatus,
@@ -231,7 +228,6 @@ impl From<EmployeeCompetencyId> for Uuid {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmployeeCompetencyDto {
     pub id: EmployeeCompetencyId,
-    pub company_id: Uuid,
     pub employee_id: Uuid,
     pub competency_id: Uuid,
     pub level: i32,
@@ -289,7 +285,6 @@ impl From<EmployeeSkillId> for Uuid {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmployeeSkillDto {
     pub id: EmployeeSkillId,
-    pub company_id: Uuid,
     pub employee_id: Uuid,
     pub skill_id: Uuid,
     pub proficiency: ProficiencyLevel,
@@ -350,7 +345,6 @@ impl From<SkillId> for Uuid {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SkillDto {
     pub id: SkillId,
-    pub company_id: Uuid,
     pub name: String,
     pub category: Option<SkillCategory>,
     pub description: Option<String>,

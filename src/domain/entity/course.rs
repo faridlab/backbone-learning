@@ -1,12 +1,12 @@
 use chrono::{DateTime, Utc};
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
-use rust_decimal::Decimal;
 
+use super::AuditMetadata;
 use super::CourseFormat;
 use super::CourseStatus;
-use super::AuditMetadata;
 
 /// Strongly-typed ID for Course
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -14,9 +14,15 @@ use super::AuditMetadata;
 pub struct CourseId(pub Uuid);
 
 impl CourseId {
-    pub fn new(id: Uuid) -> Self { Self(id) }
-    pub fn generate() -> Self { Self(Uuid::new_v4()) }
-    pub fn into_inner(self) -> Uuid { self.0 }
+    pub fn new(id: Uuid) -> Self {
+        Self(id)
+    }
+    pub fn generate() -> Self {
+        Self(Uuid::new_v4())
+    }
+    pub fn into_inner(self) -> Uuid {
+        self.0
+    }
 }
 
 impl std::fmt::Display for CourseId {
@@ -33,26 +39,33 @@ impl std::str::FromStr for CourseId {
 }
 
 impl From<Uuid> for CourseId {
-    fn from(id: Uuid) -> Self { Self(id) }
+    fn from(id: Uuid) -> Self {
+        Self(id)
+    }
 }
 
 impl From<CourseId> for Uuid {
-    fn from(id: CourseId) -> Self { id.0 }
+    fn from(id: CourseId) -> Self {
+        id.0
+    }
 }
 
 impl AsRef<Uuid> for CourseId {
-    fn as_ref(&self) -> &Uuid { &self.0 }
+    fn as_ref(&self) -> &Uuid {
+        &self.0
+    }
 }
 
 impl std::ops::Deref for CourseId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target { &self.0 }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Course {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub name: String,
     pub description: Option<String>,
     pub format: CourseFormat,
@@ -73,10 +86,9 @@ impl Course {
     }
 
     /// Create a new Course with required fields
-    pub fn new(company_id: Uuid, name: String, format: CourseFormat, status: CourseStatus) -> Self {
+    pub fn new(name: String, format: CourseFormat, status: CourseStatus) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id,
             name,
             description: None,
             format,
@@ -139,7 +151,6 @@ impl Course {
         self.metadata.deleted_by.as_ref()
     }
 
-
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -182,32 +193,45 @@ impl Course {
     pub fn apply_patch(&mut self, fields: std::collections::HashMap<String, serde_json::Value>) {
         for (key, value) in fields {
             match key.as_str() {
-                "company_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.company_id = v; }
-                }
                 "name" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.name = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.name = v;
+                    }
                 }
                 "description" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.description = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.description = v;
+                    }
                 }
                 "format" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.format = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.format = v;
+                    }
                 }
                 "duration_hours" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.duration_hours = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.duration_hours = v;
+                    }
                 }
                 "cost" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.cost = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.cost = v;
+                    }
                 }
                 "provider" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.provider = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.provider = v;
+                    }
                 }
                 "certification_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.certification_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.certification_id = v;
+                    }
                 }
                 "status" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.status = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.status = v;
+                    }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -263,7 +287,6 @@ impl backbone_orm::EntityRepoMeta for Course {
     fn column_types() -> std::collections::HashMap<String, String> {
         let mut m = std::collections::HashMap::new();
         m.insert("id".to_string(), "uuid".to_string());
-        m.insert("company_id".to_string(), "uuid".to_string());
         m.insert("certification_id".to_string(), "uuid".to_string());
         m.insert("format".to_string(), "course_format".to_string());
         m.insert("status".to_string(), "course_status".to_string());
@@ -271,9 +294,6 @@ impl backbone_orm::EntityRepoMeta for Course {
     }
     fn search_fields() -> &'static [&'static str] {
         &["name"]
-    }
-    fn company_field() -> Option<&'static str> {
-        Some("company_id")
     }
 }
 
@@ -283,7 +303,6 @@ impl backbone_orm::EntityRepoMeta for Course {
 /// System fields (id, metadata, timestamps) are auto-initialized.
 #[derive(Debug, Clone, Default)]
 pub struct CourseBuilder {
-    company_id: Option<Uuid>,
     name: Option<String>,
     description: Option<String>,
     format: Option<CourseFormat>,
@@ -295,12 +314,6 @@ pub struct CourseBuilder {
 }
 
 impl CourseBuilder {
-    /// Set the company_id field (required)
-    pub fn company_id(mut self, value: Uuid) -> Self {
-        self.company_id = Some(value);
-        self
-    }
-
     /// Set the name field (required)
     pub fn name(mut self, value: String) -> Self {
         self.name = Some(value);
@@ -353,12 +366,10 @@ impl CourseBuilder {
     ///
     /// Returns Err if any required field without a default is missing.
     pub fn build(self) -> Result<Course, String> {
-        let company_id = self.company_id.ok_or_else(|| "company_id is required".to_string())?;
         let name = self.name.ok_or_else(|| "name is required".to_string())?;
 
         Ok(Course {
             id: Uuid::new_v4(),
-            company_id,
             name,
             description: self.description,
             format: self.format.unwrap_or(CourseFormat::default()),

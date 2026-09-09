@@ -5,8 +5,8 @@
 //! This trait defines the repository contract for the Skill aggregate.
 //! Implementation is in the infrastructure layer.
 
-use async_trait::async_trait;
 use anyhow::Result;
+use async_trait::async_trait;
 use uuid::Uuid;
 
 use crate::domain::entity::{Skill, SkillCategory};
@@ -44,7 +44,6 @@ pub struct SkillPaginatedResult {
 /// Filter parameters for list queries
 #[derive(Debug, Clone, Default)]
 pub struct SkillFilter {
-    pub company_id: Option<Uuid>,
     pub name: Option<String>,
     pub category: Option<SkillCategory>,
     pub description: Option<String>,
@@ -53,7 +52,7 @@ pub struct SkillFilter {
 impl SkillFilter {
     /// Check if any filter is set
     pub fn has_filters(&self) -> bool {
-        self.company_id.is_some() || self.name.is_some() || self.category.is_some() || self.description.is_some()
+        self.name.is_some() || self.category.is_some() || self.description.is_some()
     }
 }
 
@@ -63,7 +62,6 @@ impl SkillFilter {
 /// Implementations should be in the infrastructure layer.
 #[async_trait]
 pub trait SkillRepository: Send + Sync {
-
     // =========================================================================
     // Core CRUD Operations
     // =========================================================================
@@ -91,7 +89,11 @@ pub trait SkillRepository: Send + Sync {
     async fn list(&self, params: SkillPaginationParams) -> Result<SkillPaginatedResult>;
 
     /// List skill with pagination and filters
-    async fn list_with_filters(&self, params: SkillPaginationParams, filters: SkillFilter) -> Result<SkillPaginatedResult>;
+    async fn list_with_filters(
+        &self,
+        params: SkillPaginationParams,
+        filters: SkillFilter,
+    ) -> Result<SkillPaginatedResult>;
 
     /// Count all skill entities
     async fn count(&self) -> Result<u64>;

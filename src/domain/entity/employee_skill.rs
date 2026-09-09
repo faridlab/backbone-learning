@@ -1,12 +1,12 @@
-use chrono::{DateTime, Utc, NaiveDate};
+use chrono::{DateTime, NaiveDate, Utc};
+use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
-use rust_decimal::Decimal;
 
+use super::AuditMetadata;
 use super::ProficiencyLevel;
 use super::SkillVerification;
-use super::AuditMetadata;
 
 /// Strongly-typed ID for EmployeeSkill
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -14,9 +14,15 @@ use super::AuditMetadata;
 pub struct EmployeeSkillId(pub Uuid);
 
 impl EmployeeSkillId {
-    pub fn new(id: Uuid) -> Self { Self(id) }
-    pub fn generate() -> Self { Self(Uuid::new_v4()) }
-    pub fn into_inner(self) -> Uuid { self.0 }
+    pub fn new(id: Uuid) -> Self {
+        Self(id)
+    }
+    pub fn generate() -> Self {
+        Self(Uuid::new_v4())
+    }
+    pub fn into_inner(self) -> Uuid {
+        self.0
+    }
 }
 
 impl std::fmt::Display for EmployeeSkillId {
@@ -33,26 +39,33 @@ impl std::str::FromStr for EmployeeSkillId {
 }
 
 impl From<Uuid> for EmployeeSkillId {
-    fn from(id: Uuid) -> Self { Self(id) }
+    fn from(id: Uuid) -> Self {
+        Self(id)
+    }
 }
 
 impl From<EmployeeSkillId> for Uuid {
-    fn from(id: EmployeeSkillId) -> Self { id.0 }
+    fn from(id: EmployeeSkillId) -> Self {
+        id.0
+    }
 }
 
 impl AsRef<Uuid> for EmployeeSkillId {
-    fn as_ref(&self) -> &Uuid { &self.0 }
+    fn as_ref(&self) -> &Uuid {
+        &self.0
+    }
 }
 
 impl std::ops::Deref for EmployeeSkillId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target { &self.0 }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct EmployeeSkill {
     pub id: Uuid,
-    pub company_id: Uuid,
     pub employee_id: Uuid,
     pub skill_id: Uuid,
     pub proficiency: ProficiencyLevel,
@@ -72,10 +85,14 @@ impl EmployeeSkill {
     }
 
     /// Create a new EmployeeSkill with required fields
-    pub fn new(company_id: Uuid, employee_id: Uuid, skill_id: Uuid, proficiency: ProficiencyLevel, verification: SkillVerification) -> Self {
+    pub fn new(
+        employee_id: Uuid,
+        skill_id: Uuid,
+        proficiency: ProficiencyLevel,
+        verification: SkillVerification,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
-            company_id,
             employee_id,
             skill_id,
             proficiency,
@@ -137,7 +154,6 @@ impl EmployeeSkill {
         self.metadata.deleted_by.as_ref()
     }
 
-
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -168,29 +184,40 @@ impl EmployeeSkill {
     pub fn apply_patch(&mut self, fields: std::collections::HashMap<String, serde_json::Value>) {
         for (key, value) in fields {
             match key.as_str() {
-                "company_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.company_id = v; }
-                }
                 "employee_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.employee_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.employee_id = v;
+                    }
                 }
                 "skill_id" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.skill_id = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.skill_id = v;
+                    }
                 }
                 "proficiency" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.proficiency = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.proficiency = v;
+                    }
                 }
                 "years_experience" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.years_experience = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.years_experience = v;
+                    }
                 }
                 "verification" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.verification = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.verification = v;
+                    }
                 }
                 "verified_by" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.verified_by = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.verified_by = v;
+                    }
                 }
                 "last_used_at" => {
-                    if let Ok(v) = serde_json::from_value(value) { self.last_used_at = v; }
+                    if let Ok(v) = serde_json::from_value(value) {
+                        self.last_used_at = v;
+                    }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -246,7 +273,6 @@ impl backbone_orm::EntityRepoMeta for EmployeeSkill {
     fn column_types() -> std::collections::HashMap<String, String> {
         let mut m = std::collections::HashMap::new();
         m.insert("id".to_string(), "uuid".to_string());
-        m.insert("company_id".to_string(), "uuid".to_string());
         m.insert("employee_id".to_string(), "uuid".to_string());
         m.insert("skill_id".to_string(), "uuid".to_string());
         m.insert("proficiency".to_string(), "proficiency_level".to_string());
@@ -256,9 +282,6 @@ impl backbone_orm::EntityRepoMeta for EmployeeSkill {
     fn search_fields() -> &'static [&'static str] {
         &[]
     }
-    fn company_field() -> Option<&'static str> {
-        Some("company_id")
-    }
 }
 
 /// Builder for EmployeeSkill entity
@@ -267,7 +290,6 @@ impl backbone_orm::EntityRepoMeta for EmployeeSkill {
 /// System fields (id, metadata, timestamps) are auto-initialized.
 #[derive(Debug, Clone, Default)]
 pub struct EmployeeSkillBuilder {
-    company_id: Option<Uuid>,
     employee_id: Option<Uuid>,
     skill_id: Option<Uuid>,
     proficiency: Option<ProficiencyLevel>,
@@ -278,12 +300,6 @@ pub struct EmployeeSkillBuilder {
 }
 
 impl EmployeeSkillBuilder {
-    /// Set the company_id field (required)
-    pub fn company_id(mut self, value: Uuid) -> Self {
-        self.company_id = Some(value);
-        self
-    }
-
     /// Set the employee_id field (required)
     pub fn employee_id(mut self, value: Uuid) -> Self {
         self.employee_id = Some(value);
@@ -330,13 +346,15 @@ impl EmployeeSkillBuilder {
     ///
     /// Returns Err if any required field without a default is missing.
     pub fn build(self) -> Result<EmployeeSkill, String> {
-        let company_id = self.company_id.ok_or_else(|| "company_id is required".to_string())?;
-        let employee_id = self.employee_id.ok_or_else(|| "employee_id is required".to_string())?;
-        let skill_id = self.skill_id.ok_or_else(|| "skill_id is required".to_string())?;
+        let employee_id = self
+            .employee_id
+            .ok_or_else(|| "employee_id is required".to_string())?;
+        let skill_id = self
+            .skill_id
+            .ok_or_else(|| "skill_id is required".to_string())?;
 
         Ok(EmployeeSkill {
             id: Uuid::new_v4(),
-            company_id,
             employee_id,
             skill_id,
             proficiency: self.proficiency.unwrap_or(ProficiencyLevel::default()),
