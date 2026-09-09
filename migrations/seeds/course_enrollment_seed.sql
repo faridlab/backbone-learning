@@ -6,7 +6,6 @@
 
 -- INSERT INTO learning.course_enrollments (
 --     id,
---     company_id,
 --     course_id,
 --     employee_id,
 --     status,

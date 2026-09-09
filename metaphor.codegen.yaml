@@ -18,6 +18,11 @@ user_owned:
   # a `--force` generate is a no-op rather than a wipe.
   - "src/**"
 
+  # Hand-authored migration that strips the module's company-fence artifacts (the
+  # ordering guard is hand-authored logic, not schema-derived emission).
+  - "migrations/20260909120000_strip_tenancy.up.sql"
+  - "migrations/20260909120000_strip_tenancy.down.sql"
+
   # Behavior tests (the golden cases / oracle) + BDD features + integration harness.
   - "tests/**"
 

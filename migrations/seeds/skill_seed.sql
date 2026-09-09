@@ -6,7 +6,6 @@
 
 -- INSERT INTO learning.skills (
 --     id,
---     company_id,
 --     name,
 --     category,
 --     description,

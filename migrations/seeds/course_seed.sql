@@ -6,7 +6,6 @@
 
 -- INSERT INTO learning.courses (
 --     id,
---     company_id,
 --     name,
 --     description,
 --     format,

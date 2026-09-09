@@ -6,7 +6,6 @@
 
 -- INSERT INTO learning.employee_skills (
 --     id,
---     company_id,
 --     employee_id,
 --     skill_id,
 --     proficiency,
