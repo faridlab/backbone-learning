@@ -24,7 +24,6 @@ impl TestDataGenerator for EmployeeSkillTestData {
         let now = Utc::now().to_rfc3339();
         json!({
             "id": Uuid::new_v4().to_string(),
-            "company_id": Uuid::new_v4().to_string(),
             "employee_id": Uuid::new_v4().to_string(),
             "skill_id": Uuid::new_v4().to_string(),
             "proficiency": "novice",
@@ -40,7 +39,6 @@ impl TestDataGenerator for EmployeeSkillTestData {
         let now = Utc::now().to_rfc3339();
         json!({
             "id": id,
-            "company_id": Uuid::new_v4().to_string(),
             "employee_id": Uuid::new_v4().to_string(),
             "skill_id": Uuid::new_v4().to_string(),
             "proficiency": "novice",
@@ -60,7 +58,13 @@ impl TestDataGenerator for EmployeeSkillTestData {
 
     async fn seed_dependencies(&self, api: &ApiTest) -> Vec<(String, String)> {
         let mut deps: Vec<(String, String)> = Vec::new();
-        if let Some(id) = super::crud_test_base::create_and_get_id(api, "/api/v1/skills", &super::skill_api_test::SkillTestData).await {
+        if let Some(id) = super::crud_test_base::create_and_get_id(
+            api,
+            "/api/v1/skills",
+            &super::skill_api_test::SkillTestData,
+        )
+        .await
+        {
             deps.push(("skill_id".to_string(), id));
         }
         deps
