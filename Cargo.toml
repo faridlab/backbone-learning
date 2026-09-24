@@ -1,6 +1,6 @@
 [package]
 name = "backbone-learning"
-version = "0.2.14"
+version = "0.2.15"
 edition = "2021"
 description = "learning & development — courses, enrollments, competencies, skills"
 
