@@ -3,6 +3,7 @@ name = "backbone-learning"
 version = "0.2.19"
 edition = "2021"
 description = "learning & development — courses, enrollments, competencies, skills"
+license = "MIT OR Apache-2.0"
 
 [lib]
 path = "src/lib.rs"
