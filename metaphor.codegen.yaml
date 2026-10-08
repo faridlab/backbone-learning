@@ -11,12 +11,49 @@
 # Add your hand-authored services, handlers, tests, and docs below as you write them.
 
 user_owned:
-  # The module was scaffolded by an earlier generator generation; the tree has
-  # since drifted from the current generator's layout (unheaded entity files,
-  # auth/bulk/usecases directories it no longer emits). Until a deliberate
-  # modernization pass reconciles the tree, the whole of src/ is user-owned so
-  # a `--force` generate is a no-op rather than a wipe.
-  - "src/**"
+  # The module was scaffolded by an earlier generator generation, and for a
+  # while the whole of src/ was user-owned. The modernization pass of
+  # 2026-10-08 reconciled it: only the files a regeneration would change for the
+  # worse, and the hand-written ones, are listed below.
+  # Configuration tuned for this module, not the generator template.
+  - "config/application-dev.yml"
+  - "config/application-prod.yml"
+  # Hand-written or hand-edited source, listed file by file so every other
+  # file under src/ is generated again (this list replaced a blanket src/**).
+  - "src/application/auth/competency_auth.rs"
+  - "src/application/auth/course_auth.rs"
+  - "src/application/auth/course_enrollment_auth.rs"
+  - "src/application/auth/employee_competency_auth.rs"
+  - "src/application/auth/employee_skill_auth.rs"
+  - "src/application/auth/mod.rs"
+  - "src/application/auth/skill_auth.rs"
+  - "src/application/bulk_operations/competency_bulk.rs"
+  - "src/application/bulk_operations/course_bulk.rs"
+  - "src/application/bulk_operations/course_enrollment_bulk.rs"
+  - "src/application/bulk_operations/employee_competency_bulk.rs"
+  - "src/application/bulk_operations/employee_skill_bulk.rs"
+  - "src/application/bulk_operations/mod.rs"
+  - "src/application/bulk_operations/shared_types.rs"
+  - "src/application/bulk_operations/skill_bulk.rs"
+  - "src/application/usecases/base.rs"
+  - "src/application/usecases/competency_usecases.rs"
+  - "src/application/usecases/course_enrollment_usecases.rs"
+  - "src/application/usecases/course_usecases.rs"
+  - "src/application/usecases/employee_competency_usecases.rs"
+  - "src/application/usecases/employee_skill_usecases.rs"
+  - "src/application/usecases/mod.rs"
+  - "src/application/usecases/skill_usecases.rs"
+  - "src/bin/seeder.rs"
+  - "src/domain/entity/course.rs"
+  - "src/domain/entity/course_enrollment.rs"
+  - "src/domain/entity/employee_skill.rs"
+  - "src/domain/repositories/competency_repository.rs"
+  - "src/domain/repositories/skill_repository.rs"
+  - "src/exports/services.rs"
+  - "src/handlers/custom.rs"
+  - "src/lib.rs"
+  - "src/presentation/dto/course_dto.rs"
+  - "src/routes/mod.rs"
 
   # Hand-authored migration that strips the module's company-fence artifacts (the
   # ordering guard is hand-authored logic, not schema-derived emission).
