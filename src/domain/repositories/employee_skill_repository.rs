@@ -5,8 +5,8 @@
 //! This trait defines the repository contract for the EmployeeSkill aggregate.
 //! Implementation is in the infrastructure layer.
 
-use anyhow::Result;
 use async_trait::async_trait;
+use anyhow::Result;
 use uuid::Uuid;
 
 use crate::domain::entity::{EmployeeSkill, ProficiencyLevel, SkillVerification};
@@ -54,11 +54,7 @@ pub struct EmployeeSkillFilter {
 impl EmployeeSkillFilter {
     /// Check if any filter is set
     pub fn has_filters(&self) -> bool {
-        self.employee_id.is_some()
-            || self.skill_id.is_some()
-            || self.proficiency.is_some()
-            || self.verification.is_some()
-            || self.verified_by.is_some()
+        self.employee_id.is_some() || self.skill_id.is_some() || self.proficiency.is_some() || self.verification.is_some() || self.verified_by.is_some()
     }
 }
 
@@ -68,6 +64,7 @@ impl EmployeeSkillFilter {
 /// Implementations should be in the infrastructure layer.
 #[async_trait]
 pub trait EmployeeSkillRepository: Send + Sync {
+
     // =========================================================================
     // Core CRUD Operations
     // =========================================================================
@@ -92,17 +89,10 @@ pub trait EmployeeSkillRepository: Send + Sync {
     // =========================================================================
 
     /// List employee_skill with pagination
-    async fn list(
-        &self,
-        params: EmployeeSkillPaginationParams,
-    ) -> Result<EmployeeSkillPaginatedResult>;
+    async fn list(&self, params: EmployeeSkillPaginationParams) -> Result<EmployeeSkillPaginatedResult>;
 
     /// List employee_skill with pagination and filters
-    async fn list_with_filters(
-        &self,
-        params: EmployeeSkillPaginationParams,
-        filters: EmployeeSkillFilter,
-    ) -> Result<EmployeeSkillPaginatedResult>;
+    async fn list_with_filters(&self, params: EmployeeSkillPaginationParams, filters: EmployeeSkillFilter) -> Result<EmployeeSkillPaginatedResult>;
 
     /// Count all employee_skill entities
     async fn count(&self) -> Result<u64>;
@@ -124,10 +114,7 @@ pub trait EmployeeSkillRepository: Send + Sync {
     async fn restore(&self, id: &str) -> Result<Option<EmployeeSkill>>;
 
     /// List soft-deleted employee_skill entities
-    async fn list_deleted(
-        &self,
-        params: EmployeeSkillPaginationParams,
-    ) -> Result<EmployeeSkillPaginatedResult>;
+    async fn list_deleted(&self, params: EmployeeSkillPaginationParams) -> Result<EmployeeSkillPaginatedResult>;
 
     /// Empty trash (permanently delete all soft-deleted entities)
     async fn empty_trash(&self) -> Result<u64>;

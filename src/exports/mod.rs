@@ -8,7 +8,7 @@
 //! ## Usage from other modules
 //!
 //! ```text
-//! use learning::exports::{CompetencyDto, LearningQueryService};
+//! use learning::exports::{CompetencyDto};
 //! ```
 
 mod types;
@@ -45,9 +45,6 @@ pub use events::*;
 /// - `SkillDto` - Data transfer object for Skill
 /// - `SkillSummary` - Summary view of Skill
 /// - `SkillId` - Type-safe ID wrapper
-///
-/// ## Public Services
-/// - `LearningQueryService` - Read-only queries
 ///
 /// ## Public Events
 /// - `CompetencyCreatedEvent` - Published when Competency is created

@@ -5,8 +5,8 @@
 //! This trait defines the repository contract for the CourseEnrollment aggregate.
 //! Implementation is in the infrastructure layer.
 
-use anyhow::Result;
 use async_trait::async_trait;
+use anyhow::Result;
 use uuid::Uuid;
 
 use crate::domain::entity::{CourseEnrollment, EnrollmentStatus};
@@ -62,6 +62,7 @@ impl CourseEnrollmentFilter {
 /// Implementations should be in the infrastructure layer.
 #[async_trait]
 pub trait CourseEnrollmentRepository: Send + Sync {
+
     // =========================================================================
     // Core CRUD Operations
     // =========================================================================
@@ -76,8 +77,7 @@ pub trait CourseEnrollmentRepository: Send + Sync {
     async fn find_all(&self) -> Result<Vec<CourseEnrollment>>;
 
     /// Update course_enrollment by ID
-    async fn update(&self, id: &str, entity: &CourseEnrollment)
-        -> Result<Option<CourseEnrollment>>;
+    async fn update(&self, id: &str, entity: &CourseEnrollment) -> Result<Option<CourseEnrollment>>;
 
     /// Delete course_enrollment by ID
     async fn delete(&self, id: &str) -> Result<bool>;
@@ -87,17 +87,10 @@ pub trait CourseEnrollmentRepository: Send + Sync {
     // =========================================================================
 
     /// List course_enrollment with pagination
-    async fn list(
-        &self,
-        params: CourseEnrollmentPaginationParams,
-    ) -> Result<CourseEnrollmentPaginatedResult>;
+    async fn list(&self, params: CourseEnrollmentPaginationParams) -> Result<CourseEnrollmentPaginatedResult>;
 
     /// List course_enrollment with pagination and filters
-    async fn list_with_filters(
-        &self,
-        params: CourseEnrollmentPaginationParams,
-        filters: CourseEnrollmentFilter,
-    ) -> Result<CourseEnrollmentPaginatedResult>;
+    async fn list_with_filters(&self, params: CourseEnrollmentPaginationParams, filters: CourseEnrollmentFilter) -> Result<CourseEnrollmentPaginatedResult>;
 
     /// Count all course_enrollment entities
     async fn count(&self) -> Result<u64>;
@@ -119,10 +112,7 @@ pub trait CourseEnrollmentRepository: Send + Sync {
     async fn restore(&self, id: &str) -> Result<Option<CourseEnrollment>>;
 
     /// List soft-deleted course_enrollment entities
-    async fn list_deleted(
-        &self,
-        params: CourseEnrollmentPaginationParams,
-    ) -> Result<CourseEnrollmentPaginatedResult>;
+    async fn list_deleted(&self, params: CourseEnrollmentPaginationParams) -> Result<CourseEnrollmentPaginatedResult>;
 
     /// Empty trash (permanently delete all soft-deleted entities)
     async fn empty_trash(&self) -> Result<u64>;

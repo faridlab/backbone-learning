@@ -5,8 +5,8 @@
 //! This trait defines the repository contract for the Course aggregate.
 //! Implementation is in the infrastructure layer.
 
-use anyhow::Result;
 use async_trait::async_trait;
+use anyhow::Result;
 use uuid::Uuid;
 
 use crate::domain::entity::{Course, CourseFormat, CourseStatus};
@@ -55,12 +55,7 @@ pub struct CourseFilter {
 impl CourseFilter {
     /// Check if any filter is set
     pub fn has_filters(&self) -> bool {
-        self.name.is_some()
-            || self.description.is_some()
-            || self.format.is_some()
-            || self.provider.is_some()
-            || self.certification_id.is_some()
-            || self.status.is_some()
+        self.name.is_some() || self.description.is_some() || self.format.is_some() || self.provider.is_some() || self.certification_id.is_some() || self.status.is_some()
     }
 }
 
@@ -70,6 +65,7 @@ impl CourseFilter {
 /// Implementations should be in the infrastructure layer.
 #[async_trait]
 pub trait CourseRepository: Send + Sync {
+
     // =========================================================================
     // Core CRUD Operations
     // =========================================================================
@@ -97,11 +93,7 @@ pub trait CourseRepository: Send + Sync {
     async fn list(&self, params: CoursePaginationParams) -> Result<CoursePaginatedResult>;
 
     /// List course with pagination and filters
-    async fn list_with_filters(
-        &self,
-        params: CoursePaginationParams,
-        filters: CourseFilter,
-    ) -> Result<CoursePaginatedResult>;
+    async fn list_with_filters(&self, params: CoursePaginationParams, filters: CourseFilter) -> Result<CoursePaginatedResult>;
 
     /// Count all course entities
     async fn count(&self) -> Result<u64>;

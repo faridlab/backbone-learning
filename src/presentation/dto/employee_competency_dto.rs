@@ -5,9 +5,9 @@
 //! DTOs provide a clean separation between domain entities and API
 //! representations, with validation and OpenAPI documentation support.
 
-use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use chrono::{DateTime, Utc, NaiveDate};
 
 #[cfg(feature = "openapi")]
 #[cfg(feature = "openapi")]
@@ -16,8 +16,8 @@ use utoipa::ToSchema;
 #[cfg(feature = "validation")]
 use validator::Validate;
 
-use crate::domain::entity::AuditMetadata;
 use crate::domain::entity::EmployeeCompetency;
+use crate::domain::entity::AuditMetadata;
 
 // =============================================================================
 // Create DTO
@@ -32,25 +32,15 @@ use crate::domain::entity::EmployeeCompetency;
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct CreateEmployeeCompetencyDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "competency_id")]
     pub competency_id: Uuid,
     #[cfg_attr(feature = "openapi", schema(example = 42))]
     pub level: i32,
-    #[serde(
-        default,
-        skip_serializing_if = "Option::is_none",
-        alias = "assessed_at"
-    )]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "assessed_at")]
     pub assessed_at: Option<NaiveDate>,
 }
 
@@ -67,25 +57,15 @@ pub struct CreateEmployeeCompetencyDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateEmployeeCompetencyDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "competency_id")]
     pub competency_id: Uuid,
     #[cfg_attr(feature = "openapi", schema(example = 42))]
     pub level: i32,
-    #[serde(
-        default,
-        skip_serializing_if = "Option::is_none",
-        alias = "assessed_at"
-    )]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "assessed_at")]
     pub assessed_at: Option<NaiveDate>,
 }
 
@@ -102,16 +82,10 @@ pub struct UpdateEmployeeCompetencyDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct PatchEmployeeCompetencyDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(skip_serializing_if = "Option::is_none", alias = "employee_id")]
     pub employee_id: Option<Uuid>,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(skip_serializing_if = "Option::is_none", alias = "competency_id")]
     pub competency_id: Option<Uuid>,
     #[cfg_attr(feature = "openapi", schema(example = 42))]
@@ -124,10 +98,7 @@ pub struct PatchEmployeeCompetencyDto {
 impl PatchEmployeeCompetencyDto {
     /// Check if any field is set
     pub fn has_changes(&self) -> bool {
-        self.employee_id.is_some()
-            || self.competency_id.is_some()
-            || self.level.is_some()
-            || self.assessed_at.is_some()
+        self.employee_id.is_some() || self.competency_id.is_some() || self.level.is_some() || self.assessed_at.is_some()
     }
 }
 
@@ -143,20 +114,11 @@ impl PatchEmployeeCompetencyDto {
 #[cfg_attr(feature = "openapi", derive(ToSchema))]
 #[serde(rename_all = "camelCase")]
 pub struct EmployeeCompetencyResponseDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     pub id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     pub employee_id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     pub competency_id: Uuid,
     #[cfg_attr(feature = "openapi", schema(example = 42))]
     pub level: i32,
@@ -194,12 +156,7 @@ pub struct EmployeeCompetencyListResponseDto {
 
 impl EmployeeCompetencyListResponseDto {
     /// Create a new list response from items and pagination info
-    pub fn new(
-        items: Vec<EmployeeCompetencyResponseDto>,
-        total: u64,
-        page: u32,
-        per_page: u32,
-    ) -> Self {
+    pub fn new(items: Vec<EmployeeCompetencyResponseDto>, total: u64, page: u32, per_page: u32) -> Self {
         let total_pages = if per_page > 0 {
             ((total as f64) / (per_page as f64)).ceil() as u32
         } else {
@@ -225,6 +182,7 @@ pub struct EmployeeCompetencySummaryDto {
     pub id: Uuid,
     pub employee_id: Uuid,
     pub competency_id: Uuid,
+    pub level: i32,
     pub created_at: Option<DateTime<Utc>>,
 }
 
@@ -252,6 +210,7 @@ impl From<EmployeeCompetency> for EmployeeCompetencySummaryDto {
             id: entity.id,
             employee_id: entity.employee_id,
             competency_id: entity.competency_id,
+            level: entity.level,
             created_at,
         }
     }
@@ -290,10 +249,7 @@ impl backbone_core::FromCreateDto<CreateEmployeeCompetencyDto> for EmployeeCompe
 }
 
 impl backbone_core::ApplyUpdateDto<UpdateEmployeeCompetencyDto> for EmployeeCompetency {
-    fn apply_update(
-        mut self,
-        dto: UpdateEmployeeCompetencyDto,
-    ) -> backbone_core::ServiceResult<Self> {
+    fn apply_update(mut self, dto: UpdateEmployeeCompetencyDto) -> backbone_core::ServiceResult<Self> {
         self.employee_id = dto.employee_id;
         self.competency_id = dto.competency_id;
         self.level = dto.level;

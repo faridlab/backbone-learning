@@ -1,8 +1,8 @@
-use super::AuditMetadata;
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, Utc, NaiveDate};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
+use super::AuditMetadata;
 
 /// Strongly-typed ID for EmployeeCompetency
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -10,15 +10,9 @@ use uuid::Uuid;
 pub struct EmployeeCompetencyId(pub Uuid);
 
 impl EmployeeCompetencyId {
-    pub fn new(id: Uuid) -> Self {
-        Self(id)
-    }
-    pub fn generate() -> Self {
-        Self(Uuid::new_v4())
-    }
-    pub fn into_inner(self) -> Uuid {
-        self.0
-    }
+    pub fn new(id: Uuid) -> Self { Self(id) }
+    pub fn generate() -> Self { Self(Uuid::new_v4()) }
+    pub fn into_inner(self) -> Uuid { self.0 }
 }
 
 impl std::fmt::Display for EmployeeCompetencyId {
@@ -35,28 +29,20 @@ impl std::str::FromStr for EmployeeCompetencyId {
 }
 
 impl From<Uuid> for EmployeeCompetencyId {
-    fn from(id: Uuid) -> Self {
-        Self(id)
-    }
+    fn from(id: Uuid) -> Self { Self(id) }
 }
 
 impl From<EmployeeCompetencyId> for Uuid {
-    fn from(id: EmployeeCompetencyId) -> Self {
-        id.0
-    }
+    fn from(id: EmployeeCompetencyId) -> Self { id.0 }
 }
 
 impl AsRef<Uuid> for EmployeeCompetencyId {
-    fn as_ref(&self) -> &Uuid {
-        &self.0
-    }
+    fn as_ref(&self) -> &Uuid { &self.0 }
 }
 
 impl std::ops::Deref for EmployeeCompetencyId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
+    fn deref(&self) -> &Self::Target { &self.0 }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
@@ -74,7 +60,7 @@ pub struct EmployeeCompetency {
 impl EmployeeCompetency {
     /// Create a builder for EmployeeCompetency
     pub fn builder() -> EmployeeCompetencyBuilder {
-        EmployeeCompetencyBuilder::default()
+        <EmployeeCompetencyBuilder as Default>::default()
     }
 
     /// Create a new EmployeeCompetency with required fields
@@ -139,6 +125,7 @@ impl EmployeeCompetency {
         self.metadata.deleted_by.as_ref()
     }
 
+
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -158,24 +145,16 @@ impl EmployeeCompetency {
         for (key, value) in fields {
             match key.as_str() {
                 "employee_id" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.employee_id = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.employee_id = v; }
                 }
                 "competency_id" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.competency_id = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.competency_id = v; }
                 }
                 "level" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.level = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.level = v; }
                 }
                 "assessed_at" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.assessed_at = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.assessed_at = v; }
                 }
                 _ => {} // ignore unknown fields
             }
@@ -233,6 +212,7 @@ impl backbone_orm::EntityRepoMeta for EmployeeCompetency {
         m.insert("id".to_string(), "uuid".to_string());
         m.insert("employee_id".to_string(), "uuid".to_string());
         m.insert("competency_id".to_string(), "uuid".to_string());
+        m.insert("assessed_at".to_string(), "date".to_string());
         m
     }
     fn search_fields() -> &'static [&'static str] {
@@ -281,12 +261,8 @@ impl EmployeeCompetencyBuilder {
     ///
     /// Returns Err if any required field without a default is missing.
     pub fn build(self) -> Result<EmployeeCompetency, String> {
-        let employee_id = self
-            .employee_id
-            .ok_or_else(|| "employee_id is required".to_string())?;
-        let competency_id = self
-            .competency_id
-            .ok_or_else(|| "competency_id is required".to_string())?;
+        let employee_id = self.employee_id.ok_or_else(|| "employee_id is required".to_string())?;
+        let competency_id = self.competency_id.ok_or_else(|| "competency_id is required".to_string())?;
 
         Ok(EmployeeCompetency {
             id: Uuid::new_v4(),

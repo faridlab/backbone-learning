@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 use uuid::Uuid;
 
-use super::AuditMetadata;
 use super::CompetencyCategory;
+use super::AuditMetadata;
 
 /// Strongly-typed ID for Competency
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -12,15 +12,9 @@ use super::CompetencyCategory;
 pub struct CompetencyId(pub Uuid);
 
 impl CompetencyId {
-    pub fn new(id: Uuid) -> Self {
-        Self(id)
-    }
-    pub fn generate() -> Self {
-        Self(Uuid::new_v4())
-    }
-    pub fn into_inner(self) -> Uuid {
-        self.0
-    }
+    pub fn new(id: Uuid) -> Self { Self(id) }
+    pub fn generate() -> Self { Self(Uuid::new_v4()) }
+    pub fn into_inner(self) -> Uuid { self.0 }
 }
 
 impl std::fmt::Display for CompetencyId {
@@ -37,28 +31,20 @@ impl std::str::FromStr for CompetencyId {
 }
 
 impl From<Uuid> for CompetencyId {
-    fn from(id: Uuid) -> Self {
-        Self(id)
-    }
+    fn from(id: Uuid) -> Self { Self(id) }
 }
 
 impl From<CompetencyId> for Uuid {
-    fn from(id: CompetencyId) -> Self {
-        id.0
-    }
+    fn from(id: CompetencyId) -> Self { id.0 }
 }
 
 impl AsRef<Uuid> for CompetencyId {
-    fn as_ref(&self) -> &Uuid {
-        &self.0
-    }
+    fn as_ref(&self) -> &Uuid { &self.0 }
 }
 
 impl std::ops::Deref for CompetencyId {
     type Target = Uuid;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
+    fn deref(&self) -> &Self::Target { &self.0 }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
@@ -75,7 +61,7 @@ pub struct Competency {
 impl Competency {
     /// Create a builder for Competency
     pub fn builder() -> CompetencyBuilder {
-        CompetencyBuilder::default()
+        <CompetencyBuilder as Default>::default()
     }
 
     /// Create a new Competency with required fields
@@ -139,6 +125,7 @@ impl Competency {
         self.metadata.deleted_by.as_ref()
     }
 
+
     // ==========================================================
     // Fluent Setters (with_* for optional fields)
     // ==========================================================
@@ -164,19 +151,13 @@ impl Competency {
         for (key, value) in fields {
             match key.as_str() {
                 "name" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.name = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.name = v; }
                 }
                 "category" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.category = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.category = v; }
                 }
                 "description" => {
-                    if let Ok(v) = serde_json::from_value(value) {
-                        self.description = v;
-                    }
+                    if let Ok(v) = serde_json::from_value(value) { self.description = v; }
                 }
                 _ => {} // ignore unknown fields
             }

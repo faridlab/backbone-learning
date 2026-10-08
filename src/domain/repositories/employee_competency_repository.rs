@@ -5,8 +5,8 @@
 //! This trait defines the repository contract for the EmployeeCompetency aggregate.
 //! Implementation is in the infrastructure layer.
 
-use anyhow::Result;
 use async_trait::async_trait;
+use anyhow::Result;
 use uuid::Uuid;
 
 use crate::domain::entity::EmployeeCompetency;
@@ -61,6 +61,7 @@ impl EmployeeCompetencyFilter {
 /// Implementations should be in the infrastructure layer.
 #[async_trait]
 pub trait EmployeeCompetencyRepository: Send + Sync {
+
     // =========================================================================
     // Core CRUD Operations
     // =========================================================================
@@ -75,11 +76,7 @@ pub trait EmployeeCompetencyRepository: Send + Sync {
     async fn find_all(&self) -> Result<Vec<EmployeeCompetency>>;
 
     /// Update employee_competency by ID
-    async fn update(
-        &self,
-        id: &str,
-        entity: &EmployeeCompetency,
-    ) -> Result<Option<EmployeeCompetency>>;
+    async fn update(&self, id: &str, entity: &EmployeeCompetency) -> Result<Option<EmployeeCompetency>>;
 
     /// Delete employee_competency by ID
     async fn delete(&self, id: &str) -> Result<bool>;
@@ -89,17 +86,10 @@ pub trait EmployeeCompetencyRepository: Send + Sync {
     // =========================================================================
 
     /// List employee_competency with pagination
-    async fn list(
-        &self,
-        params: EmployeeCompetencyPaginationParams,
-    ) -> Result<EmployeeCompetencyPaginatedResult>;
+    async fn list(&self, params: EmployeeCompetencyPaginationParams) -> Result<EmployeeCompetencyPaginatedResult>;
 
     /// List employee_competency with pagination and filters
-    async fn list_with_filters(
-        &self,
-        params: EmployeeCompetencyPaginationParams,
-        filters: EmployeeCompetencyFilter,
-    ) -> Result<EmployeeCompetencyPaginatedResult>;
+    async fn list_with_filters(&self, params: EmployeeCompetencyPaginationParams, filters: EmployeeCompetencyFilter) -> Result<EmployeeCompetencyPaginatedResult>;
 
     /// Count all employee_competency entities
     async fn count(&self) -> Result<u64>;
@@ -121,10 +111,7 @@ pub trait EmployeeCompetencyRepository: Send + Sync {
     async fn restore(&self, id: &str) -> Result<Option<EmployeeCompetency>>;
 
     /// List soft-deleted employee_competency entities
-    async fn list_deleted(
-        &self,
-        params: EmployeeCompetencyPaginationParams,
-    ) -> Result<EmployeeCompetencyPaginatedResult>;
+    async fn list_deleted(&self, params: EmployeeCompetencyPaginationParams) -> Result<EmployeeCompetencyPaginatedResult>;
 
     /// Empty trash (permanently delete all soft-deleted entities)
     async fn empty_trash(&self) -> Result<u64>;

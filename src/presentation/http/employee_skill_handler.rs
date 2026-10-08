@@ -51,6 +51,7 @@ impl From<ServiceError> for EmployeeSkillError {
             ServiceError::AlreadyExists(ref msg) => Self::Validation(msg.clone()),
             ServiceError::Repository(ref e) => Self::Database(e.to_string()),
             ServiceError::Internal(ref msg) => Self::Internal(msg.clone()),
+            ServiceError::Violations(_) => Self::Validation(err.to_string()),
         }
     }
 }
@@ -132,6 +133,13 @@ pub fn create_employee_skill_read_routes(service: Arc<EmployeeSkillService>) -> 
 ///
 /// These routes must NOT be publicly exposed. Wrap them with an auth
 /// middleware before nesting into the application router.
+///
+/// # This is unguarded generic CRUD, not a validated write path
+///
+/// These are plain create/update/patch/delete mutations over the entity row —
+/// they bypass all business invariants. If the module exposes a validated write
+/// service (e.g. a command router over its domain engine), serve THAT instead
+/// for any mutation that must respect domain rules.
 pub fn create_employee_skill_write_routes(service: Arc<EmployeeSkillService>) -> Router {
     BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::write_routes(
         service,
@@ -180,4 +188,3 @@ pub fn create_protected_employee_skill_routes<A: AuthMiddleware + Send + Sync + 
             }
         }))
 }
-

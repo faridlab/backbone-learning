@@ -5,10 +5,10 @@
 //! DTOs provide a clean separation between domain entities and API
 //! representations, with validation and OpenAPI documentation support.
 
-use chrono::{DateTime, NaiveDate, Utc};
-use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use chrono::{DateTime, Utc, NaiveDate};
+use rust_decimal::Decimal;
 
 #[cfg(feature = "openapi")]
 #[cfg(feature = "openapi")]
@@ -17,8 +17,8 @@ use utoipa::ToSchema;
 #[cfg(feature = "validation")]
 use validator::Validate;
 
-use crate::domain::entity::AuditMetadata;
 use crate::domain::entity::CourseEnrollment;
+use crate::domain::entity::AuditMetadata;
 use crate::domain::entity::EnrollmentStatus;
 
 // =============================================================================
@@ -34,27 +34,17 @@ use crate::domain::entity::EnrollmentStatus;
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct CreateCourseEnrollmentDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "course_id")]
     pub course_id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
     pub status: EnrollmentStatus,
     #[cfg_attr(feature = "openapi", schema(example = "2024-01-01"))]
     #[serde(alias = "enrolled_at")]
     pub enrolled_at: NaiveDate,
-    #[serde(
-        default,
-        skip_serializing_if = "Option::is_none",
-        alias = "completed_at"
-    )]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "completed_at")]
     pub completed_at: Option<NaiveDate>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub score: Option<Decimal>,
@@ -73,27 +63,17 @@ pub struct CreateCourseEnrollmentDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct UpdateCourseEnrollmentDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "course_id")]
     pub course_id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
     pub status: EnrollmentStatus,
     #[cfg_attr(feature = "openapi", schema(example = "2024-01-01"))]
     #[serde(alias = "enrolled_at")]
     pub enrolled_at: NaiveDate,
-    #[serde(
-        default,
-        skip_serializing_if = "Option::is_none",
-        alias = "completed_at"
-    )]
+    #[serde(default, skip_serializing_if = "Option::is_none", alias = "completed_at")]
     pub completed_at: Option<NaiveDate>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub score: Option<Decimal>,
@@ -112,16 +92,10 @@ pub struct UpdateCourseEnrollmentDto {
 #[cfg_attr(feature = "validation", derive(Validate))]
 #[serde(rename_all = "camelCase")]
 pub struct PatchCourseEnrollmentDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(skip_serializing_if = "Option::is_none", alias = "course_id")]
     pub course_id: Option<Uuid>,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(skip_serializing_if = "Option::is_none", alias = "employee_id")]
     pub employee_id: Option<Uuid>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -138,12 +112,7 @@ pub struct PatchCourseEnrollmentDto {
 impl PatchCourseEnrollmentDto {
     /// Check if any field is set
     pub fn has_changes(&self) -> bool {
-        self.course_id.is_some()
-            || self.employee_id.is_some()
-            || self.status.is_some()
-            || self.enrolled_at.is_some()
-            || self.completed_at.is_some()
-            || self.score.is_some()
+        self.course_id.is_some() || self.employee_id.is_some() || self.status.is_some() || self.enrolled_at.is_some() || self.completed_at.is_some() || self.score.is_some()
     }
 }
 
@@ -159,20 +128,11 @@ impl PatchCourseEnrollmentDto {
 #[cfg_attr(feature = "openapi", derive(ToSchema))]
 #[serde(rename_all = "camelCase")]
 pub struct CourseEnrollmentResponseDto {
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     pub id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     pub course_id: Uuid,
-    #[cfg_attr(
-        feature = "openapi",
-        schema(example = "550e8400-e29b-41d4-a716-446655440000")
-    )]
+    #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     pub employee_id: Uuid,
     pub status: EnrollmentStatus,
     #[cfg_attr(feature = "openapi", schema(example = "2024-01-01"))]
@@ -212,12 +172,7 @@ pub struct CourseEnrollmentListResponseDto {
 
 impl CourseEnrollmentListResponseDto {
     /// Create a new list response from items and pagination info
-    pub fn new(
-        items: Vec<CourseEnrollmentResponseDto>,
-        total: u64,
-        page: u32,
-        per_page: u32,
-    ) -> Self {
+    pub fn new(items: Vec<CourseEnrollmentResponseDto>, total: u64, page: u32, per_page: u32) -> Self {
         let total_pages = if per_page > 0 {
             ((total as f64) / (per_page as f64)).ceil() as u32
         } else {
@@ -243,6 +198,7 @@ pub struct CourseEnrollmentSummaryDto {
     pub id: Uuid,
     pub course_id: Uuid,
     pub employee_id: Uuid,
+    pub status: EnrollmentStatus,
     pub created_at: Option<DateTime<Utc>>,
 }
 
@@ -272,6 +228,7 @@ impl From<CourseEnrollment> for CourseEnrollmentSummaryDto {
             id: entity.id,
             course_id: entity.course_id,
             employee_id: entity.employee_id,
+            status: entity.status,
             created_at,
         }
     }
@@ -314,10 +271,7 @@ impl backbone_core::FromCreateDto<CreateCourseEnrollmentDto> for CourseEnrollmen
 }
 
 impl backbone_core::ApplyUpdateDto<UpdateCourseEnrollmentDto> for CourseEnrollment {
-    fn apply_update(
-        mut self,
-        dto: UpdateCourseEnrollmentDto,
-    ) -> backbone_core::ServiceResult<Self> {
+    fn apply_update(mut self, dto: UpdateCourseEnrollmentDto) -> backbone_core::ServiceResult<Self> {
         self.course_id = dto.course_id;
         self.employee_id = dto.employee_id;
         self.status = dto.status;
