@@ -50,7 +50,6 @@ user_owned:
   - "src/domain/repositories/competency_repository.rs"
   - "src/domain/repositories/skill_repository.rs"
   - "src/exports/services.rs"
-  - "src/handlers/custom.rs"
   - "src/lib.rs"
   - "src/presentation/dto/course_dto.rs"
   - "src/routes/mod.rs"
