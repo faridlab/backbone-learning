@@ -17,9 +17,5 @@ pub fn competency_validator() -> CompetencyValidator {
     EntityValidator::new()
         .rule(RequiredString::new("name", |e: &Competency| &e.name))
         .rule(OptionalNotBlank::new("description", |e: &Competency| e.description.as_deref()))
-    // <<< CUSTOM RULES
-    // END CUSTOM RULES
 }
 
-// <<< CUSTOM
-// END CUSTOM

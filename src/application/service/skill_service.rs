@@ -32,5 +32,3 @@ pub type SkillService = GenericCrudService<
     SkillRepository,
 >;
 
-// <<< CUSTOM
-// END CUSTOM

@@ -32,5 +32,3 @@ pub type CourseService = GenericCrudService<
     CourseRepository,
 >;
 
-// <<< CUSTOM
-// END CUSTOM

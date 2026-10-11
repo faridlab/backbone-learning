@@ -18,5 +18,3 @@ use crate::domain::entity::Competency;
 /// service. `PermitAllPolicy` is the safe default until then.
 pub type CompetencyDomainPolicy = PermitAllPolicy<Competency>;
 
-// <<< CUSTOM
-// END CUSTOM

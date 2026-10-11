@@ -292,7 +292,7 @@ impl backbone_core::ApplyUpdateDto<UpdateEmployeeSkillDto> for EmployeeSkill {
 // Custom DTOs
 // =============================================================================
 
-// <<< CUSTOM DTOs
 // Add custom DTOs specific to EmployeeSkill here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
+

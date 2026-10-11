@@ -12,8 +12,6 @@ pub mod employee_competency_handler;
 pub mod employee_skill_handler;
 pub mod skill_handler;
 
-// <<< CUSTOM
-// END CUSTOM
 
 // Re-exports
 pub use competency_handler::{create_competency_routes, create_competency_read_routes, create_competency_write_routes};
@@ -22,5 +20,3 @@ pub use course_enrollment_handler::{create_course_enrollment_routes, create_cour
 pub use employee_competency_handler::{create_employee_competency_routes, create_employee_competency_read_routes, create_employee_competency_write_routes};
 pub use employee_skill_handler::{create_employee_skill_routes, create_employee_skill_read_routes, create_employee_skill_write_routes};
 pub use skill_handler::{create_skill_routes, create_skill_read_routes, create_skill_write_routes};
-// <<< CUSTOM
-// END CUSTOM

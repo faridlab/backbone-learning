@@ -15,10 +15,6 @@ pub type CourseEnrollmentValidator = EntityValidator<CourseEnrollment>;
 /// Build a validator for CourseEnrollment with all schema-defined field rules.
 pub fn course_enrollment_validator() -> CourseEnrollmentValidator {
     EntityValidator::new()
-    // <<< CUSTOM RULES
-    // END CUSTOM RULES
         // No schema-derived rules — add custom rules above.
 }
 
-// <<< CUSTOM
-// END CUSTOM

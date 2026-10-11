@@ -262,7 +262,7 @@ impl backbone_core::ApplyUpdateDto<UpdateEmployeeCompetencyDto> for EmployeeComp
 // Custom DTOs
 // =============================================================================
 
-// <<< CUSTOM DTOs
 // Add custom DTOs specific to EmployeeCompetency here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
+

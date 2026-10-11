@@ -286,7 +286,7 @@ impl backbone_core::ApplyUpdateDto<UpdateCourseEnrollmentDto> for CourseEnrollme
 // Custom DTOs
 // =============================================================================
 
-// <<< CUSTOM DTOs
 // Add custom DTOs specific to CourseEnrollment here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
+

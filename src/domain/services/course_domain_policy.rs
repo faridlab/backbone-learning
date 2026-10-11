@@ -18,5 +18,3 @@ use crate::domain::entity::Course;
 /// service. `PermitAllPolicy` is the safe default until then.
 pub type CourseDomainPolicy = PermitAllPolicy<Course>;
 
-// <<< CUSTOM
-// END CUSTOM

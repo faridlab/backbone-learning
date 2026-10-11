@@ -188,3 +188,4 @@ pub fn create_protected_course_enrollment_routes<A: AuthMiddleware + Send + Sync
             }
         }))
 }
+

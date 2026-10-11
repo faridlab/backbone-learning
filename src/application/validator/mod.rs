@@ -19,5 +19,3 @@ pub use employee_competency_validator::{EmployeeCompetencyValidator, employee_co
 pub use employee_skill_validator::{EmployeeSkillValidator, employee_skill_validator};
 pub use skill_validator::{SkillValidator, skill_validator};
 
-// <<< CUSTOM
-// END CUSTOM

@@ -187,3 +187,4 @@ pub fn create_protected_employee_competency_routes<A: AuthMiddleware + Send + Sy
             }
         }))
 }
+

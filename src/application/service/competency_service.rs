@@ -32,5 +32,3 @@ pub type CompetencyService = GenericCrudService<
     CompetencyRepository,
 >;
 
-// <<< CUSTOM
-// END CUSTOM

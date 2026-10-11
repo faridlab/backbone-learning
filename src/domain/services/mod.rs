@@ -16,5 +16,3 @@ pub use employee_competency_domain_policy::EmployeeCompetencyDomainPolicy;
 pub use employee_skill_domain_policy::EmployeeSkillDomainPolicy;
 pub use skill_domain_policy::SkillDomainPolicy;
 
-// <<< CUSTOM
-// END CUSTOM

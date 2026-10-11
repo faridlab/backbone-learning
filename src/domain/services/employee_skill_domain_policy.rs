@@ -18,5 +18,3 @@ use crate::domain::entity::EmployeeSkill;
 /// service. `PermitAllPolicy` is the safe default until then.
 pub type EmployeeSkillDomainPolicy = PermitAllPolicy<EmployeeSkill>;
 
-// <<< CUSTOM
-// END CUSTOM

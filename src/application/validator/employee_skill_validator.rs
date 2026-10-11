@@ -15,10 +15,6 @@ pub type EmployeeSkillValidator = EntityValidator<EmployeeSkill>;
 /// Build a validator for EmployeeSkill with all schema-defined field rules.
 pub fn employee_skill_validator() -> EmployeeSkillValidator {
     EntityValidator::new()
-    // <<< CUSTOM RULES
-    // END CUSTOM RULES
         // No schema-derived rules — add custom rules above.
 }
 
-// <<< CUSTOM
-// END CUSTOM

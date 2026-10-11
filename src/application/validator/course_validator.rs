@@ -18,9 +18,5 @@ pub fn course_validator() -> CourseValidator {
         .rule(RequiredString::new("name", |e: &Course| &e.name))
         .rule(OptionalNotBlank::new("description", |e: &Course| e.description.as_deref()))
         .rule(OptionalNotBlank::new("provider", |e: &Course| e.provider.as_deref()))
-    // <<< CUSTOM RULES
-    // END CUSTOM RULES
 }
 
-// <<< CUSTOM
-// END CUSTOM

@@ -247,7 +247,7 @@ impl backbone_core::ApplyUpdateDto<UpdateCompetencyDto> for Competency {
 // Custom DTOs
 // =============================================================================
 
-// <<< CUSTOM DTOs
 // Add custom DTOs specific to Competency here.
 // This section will be preserved during regeneration.
 // >>> END CUSTOM DTOs
+

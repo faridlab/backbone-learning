@@ -17,9 +17,5 @@ pub fn skill_validator() -> SkillValidator {
     EntityValidator::new()
         .rule(RequiredString::new("name", |e: &Skill| &e.name))
         .rule(OptionalNotBlank::new("description", |e: &Skill| e.description.as_deref()))
-    // <<< CUSTOM RULES
-    // END CUSTOM RULES
 }
 
-// <<< CUSTOM
-// END CUSTOM

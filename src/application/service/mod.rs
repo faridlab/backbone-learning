@@ -14,8 +14,6 @@ pub mod employee_competency_service;
 pub mod employee_skill_service;
 pub mod skill_service;
 
-// <<< CUSTOM
-// END CUSTOM
 
 pub use competency_service::CompetencyService;
 pub use course_service::CourseService;
@@ -23,5 +21,3 @@ pub use course_enrollment_service::CourseEnrollmentService;
 pub use employee_competency_service::EmployeeCompetencyService;
 pub use employee_skill_service::EmployeeSkillService;
 pub use skill_service::SkillService;
-// <<< CUSTOM
-// END CUSTOM

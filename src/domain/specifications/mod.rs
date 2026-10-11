@@ -13,5 +13,3 @@ pub mod employee_competency_specification;
 pub mod employee_skill_specification;
 pub mod skill_specification;
 
-// <<< CUSTOM
-// END CUSTOM

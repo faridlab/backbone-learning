@@ -220,6 +220,4 @@ impl Default for LearningEventMetadata {
 // CUSTOM EVENTS
 // ============================================================================
 
-// <<< CUSTOM EVENTS START >>>
 // Add custom public events here
-// <<< CUSTOM EVENTS END >>>

@@ -187,3 +187,4 @@ pub fn create_protected_course_routes<A: AuthMiddleware + Send + Sync + 'static>
             }
         }))
 }
+

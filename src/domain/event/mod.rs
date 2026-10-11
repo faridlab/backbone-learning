@@ -28,5 +28,3 @@ pub use employee_skill_event_handlers::EmployeeSkillEventHandler;
 pub use skill_events::{SkillEvent, SkillEventPublisher, NoopSkillEventPublisher};
 pub use skill_event_handlers::SkillEventHandler;
 
-// <<< CUSTOM
-// END CUSTOM
