@@ -1,6 +1,6 @@
 [package]
 name = "backbone-learning"
-version = "0.6.0"
+version = "0.7.0"
 edition = "2021"
 description = "learning & development — courses, enrollments, competencies, skills"
 license = "MIT OR Apache-2.0"
