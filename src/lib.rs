@@ -136,23 +136,23 @@ impl LearningModuleBuilder {
 
         // Competency service
         let competency_repository = Arc::new(CompetencyRepository::new(db_pool.clone()));
-        let competency_service = Arc::new(CompetencyService::with_repository(competency_repository.clone()));
+        let competency_service = Arc::new(CompetencyService::with_repository(competency_repository.clone()).with_guard(Arc::new(crate::application::service::CompetencyRowRules)));
 
         // Course service
         let course_repository = Arc::new(CourseRepository::new(db_pool.clone()));
-        let course_service = Arc::new(CourseService::with_repository(course_repository.clone()));
+        let course_service = Arc::new(CourseService::with_repository(course_repository.clone()).with_guard(Arc::new(crate::application::service::CourseRowRules)));
 
         // CourseEnrollment service
         let course_enrollment_repository = Arc::new(CourseEnrollmentRepository::new(db_pool.clone()));
-        let course_enrollment_service = Arc::new(CourseEnrollmentService::with_repository(course_enrollment_repository.clone()));
+        let course_enrollment_service = Arc::new(CourseEnrollmentService::with_repository(course_enrollment_repository.clone()).with_guard(Arc::new(crate::application::service::CourseEnrollmentRowRules)));
 
         // EmployeeCompetency service
         let employee_competency_repository = Arc::new(EmployeeCompetencyRepository::new(db_pool.clone()));
-        let employee_competency_service = Arc::new(EmployeeCompetencyService::with_repository(employee_competency_repository.clone()));
+        let employee_competency_service = Arc::new(EmployeeCompetencyService::with_repository(employee_competency_repository.clone()).with_guard(Arc::new(crate::application::service::EmployeeCompetencyRowRules)));
 
         // EmployeeSkill service
         let employee_skill_repository = Arc::new(EmployeeSkillRepository::new(db_pool.clone()));
-        let employee_skill_service = Arc::new(EmployeeSkillService::with_repository(employee_skill_repository.clone()));
+        let employee_skill_service = Arc::new(EmployeeSkillService::with_repository(employee_skill_repository.clone()).with_guard(Arc::new(crate::application::service::EmployeeSkillRowRules)));
 
         // Skill service
         let skill_repository = Arc::new(SkillRepository::new(db_pool.clone()));

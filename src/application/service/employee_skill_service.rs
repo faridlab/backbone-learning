@@ -32,3 +32,45 @@ pub type EmployeeSkillService = GenericCrudService<
     EmployeeSkillRepository,
 >;
 
+/// The rules the schema declares for EmployeeSkill, checked against the row a create or update
+/// would store. The generated build attaches it to [`EmployeeSkillService`]. A refusing rule's
+/// break answers 422; a rule in shadow is logged under `backbone::write_guard` and the
+/// write goes ahead.
+pub struct EmployeeSkillRowRules;
+
+#[async_trait::async_trait]
+impl backbone_core::write_guard::WriteGuard<EmployeeSkill> for EmployeeSkillRowRules {
+    async fn check(
+        &self,
+        ctx: &backbone_core::write_guard::WriteCtx<'_, EmployeeSkill>,
+    ) -> backbone_core::write_guard::GuardOutcome {
+        use backbone_core::row_rule as r;
+        use backbone_core::violation::Violation;
+        use backbone_core::write_guard::{GuardOutcome, WriteKind};
+        let (create, update) = (ctx.kind == WriteKind::Create, ctx.kind == WriteKind::Update);
+        let Some(after) = ctx.after.filter(|_| create || update) else {
+            return GuardOutcome::allow();
+        };
+        let Ok(row) = serde_json::to_value(after) else {
+            return GuardOutcome::allow();
+        };
+        let row = &row;
+        let old = ctx.before.and_then(|b| serde_json::to_value(b).ok());
+        let mut shadow = Vec::new();
+        let mut refuse = Vec::new();
+        // `employee_id_required` (@required on EmployeeSkill.employee_id)
+        if (create || (update && r::changed(old.as_ref(), row, &["employee_id"]))) && !r::holds(&r::and(r::is_not_null(r::field(row, "employee_id")), r::not(r::is_empty(r::trim(r::field(row, "employee_id")))))) {
+            refuse.push(Violation::new("employee_id", "required", "employee_id is required"));
+        }
+        // `skill_id_required` (@required on EmployeeSkill.skill_id)
+        if (create || (update && r::changed(old.as_ref(), row, &["skill_id"]))) && !r::holds(&r::and(r::is_not_null(r::field(row, "skill_id")), r::not(r::is_empty(r::trim(r::field(row, "skill_id")))))) {
+            refuse.push(Violation::new("skill_id", "required", "skill_id is required"));
+        }
+        // `years_experience_non_negative` (@non_negative on EmployeeSkill.years_experience)
+        if (create || (update && r::changed(old.as_ref(), row, &["years_experience"]))) && !r::holds(&r::ge(r::field(row, "years_experience"), r::Val::Num(0.0_f64))) {
+            shadow.push(Violation::new("years_experience", "non_negative", "years_experience must not be negative"));
+        }
+        GuardOutcome { refuse, shadow }
+    }
+}
+
