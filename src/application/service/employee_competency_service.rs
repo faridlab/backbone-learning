@@ -56,7 +56,7 @@ impl backbone_core::write_guard::WriteGuard<EmployeeCompetency> for EmployeeComp
         };
         let row = &row;
         let old = ctx.before.and_then(|b| serde_json::to_value(b).ok());
-        let mut shadow = Vec::new();
+        let shadow = Vec::new();
         let mut refuse = Vec::new();
         // `employee_id_required` (@required on EmployeeCompetency.employee_id)
         if (create || (update && r::changed(old.as_ref(), row, &["employee_id"]))) && !r::holds(&r::and(r::is_not_null(r::field(row, "employee_id")), r::not(r::is_empty(r::trim(r::field(row, "employee_id")))))) {
@@ -68,7 +68,7 @@ impl backbone_core::write_guard::WriteGuard<EmployeeCompetency> for EmployeeComp
         }
         // `level_range` (@range(1, 5) on EmployeeCompetency.level)
         if (create || (update && r::changed(old.as_ref(), row, &["level"]))) && !r::holds(&r::and(r::ge(r::field(row, "level"), r::Val::Num(1.0_f64)), r::le(r::field(row, "level"), r::Val::Num(5.0_f64)))) {
-            shadow.push(Violation::new("level", "range", "level must be between 1 and 5").with_param("min", 1_i64).with_param("max", 5_i64));
+            refuse.push(Violation::new("level", "range", "level must be between 1 and 5").with_param("min", 1_i64).with_param("max", 5_i64));
         }
         GuardOutcome { refuse, shadow }
     }

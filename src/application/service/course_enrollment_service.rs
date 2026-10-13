@@ -56,7 +56,7 @@ impl backbone_core::write_guard::WriteGuard<CourseEnrollment> for CourseEnrollme
         };
         let row = &row;
         let old = ctx.before.and_then(|b| serde_json::to_value(b).ok());
-        let mut shadow = Vec::new();
+        let shadow = Vec::new();
         let mut refuse = Vec::new();
         // `course_id_required` (@required on CourseEnrollment.course_id)
         if (create || (update && r::changed(old.as_ref(), row, &["course_id"]))) && !r::holds(&r::and(r::is_not_null(r::field(row, "course_id")), r::not(r::is_empty(r::trim(r::field(row, "course_id")))))) {
@@ -68,7 +68,7 @@ impl backbone_core::write_guard::WriteGuard<CourseEnrollment> for CourseEnrollme
         }
         // `score_non_negative` (@non_negative on CourseEnrollment.score)
         if (create || (update && r::changed(old.as_ref(), row, &["score"]))) && !r::holds(&r::ge(r::field(row, "score"), r::Val::Num(0.0_f64))) {
-            shadow.push(Violation::new("score", "non_negative", "score must not be negative"));
+            refuse.push(Violation::new("score", "non_negative", "score must not be negative"));
         }
         GuardOutcome { refuse, shadow }
     }

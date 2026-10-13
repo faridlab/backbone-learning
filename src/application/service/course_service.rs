@@ -56,7 +56,7 @@ impl backbone_core::write_guard::WriteGuard<Course> for CourseRowRules {
         };
         let row = &row;
         let old = ctx.before.and_then(|b| serde_json::to_value(b).ok());
-        let mut shadow = Vec::new();
+        let shadow = Vec::new();
         let mut refuse = Vec::new();
         // `name_required` (@required on Course.name)
         if (create || (update && r::changed(old.as_ref(), row, &["name"]))) && !r::holds(&r::and(r::is_not_null(r::field(row, "name")), r::not(r::is_empty(r::trim(r::field(row, "name")))))) {
@@ -64,19 +64,19 @@ impl backbone_core::write_guard::WriteGuard<Course> for CourseRowRules {
         }
         // `name_max_length` (@max(180) on Course.name)
         if (create || (update && r::changed(old.as_ref(), row, &["name"]))) && !r::holds(&r::le(r::length(r::field(row, "name")), r::Val::Num(180.0_f64))) {
-            shadow.push(Violation::new("name", "max_length", "name must be at most 180 characters").with_param("max", 180_i64));
+            refuse.push(Violation::new("name", "max_length", "name must be at most 180 characters").with_param("max", 180_i64));
         }
         // `duration_hours_non_negative` (@non_negative on Course.duration_hours)
         if (create || (update && r::changed(old.as_ref(), row, &["duration_hours"]))) && !r::holds(&r::ge(r::field(row, "duration_hours"), r::Val::Num(0.0_f64))) {
-            shadow.push(Violation::new("duration_hours", "non_negative", "duration_hours must not be negative"));
+            refuse.push(Violation::new("duration_hours", "non_negative", "duration_hours must not be negative"));
         }
         // `cost_non_negative` (@non_negative on Course.cost)
         if (create || (update && r::changed(old.as_ref(), row, &["cost"]))) && !r::holds(&r::ge(r::field(row, "cost"), r::Val::Num(0.0_f64))) {
-            shadow.push(Violation::new("cost", "non_negative", "cost must not be negative"));
+            refuse.push(Violation::new("cost", "non_negative", "cost must not be negative"));
         }
         // `provider_max_length` (@max(180) on Course.provider)
         if (create || (update && r::changed(old.as_ref(), row, &["provider"]))) && !r::holds(&r::le(r::length(r::field(row, "provider")), r::Val::Num(180.0_f64))) {
-            shadow.push(Violation::new("provider", "max_length", "provider must be at most 180 characters").with_param("max", 180_i64));
+            refuse.push(Violation::new("provider", "max_length", "provider must be at most 180 characters").with_param("max", 180_i64));
         }
         GuardOutcome { refuse, shadow }
     }
