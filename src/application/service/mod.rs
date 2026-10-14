@@ -27,3 +27,51 @@ pub use course_enrollment_service::CourseEnrollmentRowRules;
 pub use employee_competency_service::EmployeeCompetencyRowRules;
 pub use employee_skill_service::EmployeeSkillRowRules;
 pub use skill_service::SkillRowRules;
+
+/// A `CompetencyService` over `repository` with its write guard attached: the way to build it, so its writes are
+/// served only with the rules the schema declares.
+pub fn build_competency_service(
+    repository: std::sync::Arc<crate::infrastructure::persistence::CompetencyRepository>,
+) -> CompetencyService {
+    CompetencyService::with_repository(repository).with_guard(std::sync::Arc::new(CompetencyRowRules))
+}
+
+/// A `CourseService` over `repository` with its write guard attached: the way to build it, so its writes are
+/// served only with the rules the schema declares.
+pub fn build_course_service(
+    repository: std::sync::Arc<crate::infrastructure::persistence::CourseRepository>,
+) -> CourseService {
+    CourseService::with_repository(repository).with_guard(std::sync::Arc::new(CourseRowRules))
+}
+
+/// A `CourseEnrollmentService` over `repository` with its write guard attached: the way to build it, so its writes are
+/// served only with the rules the schema declares.
+pub fn build_course_enrollment_service(
+    repository: std::sync::Arc<crate::infrastructure::persistence::CourseEnrollmentRepository>,
+) -> CourseEnrollmentService {
+    CourseEnrollmentService::with_repository(repository).with_guard(std::sync::Arc::new(CourseEnrollmentRowRules))
+}
+
+/// A `EmployeeCompetencyService` over `repository` with its write guard attached: the way to build it, so its writes are
+/// served only with the rules the schema declares.
+pub fn build_employee_competency_service(
+    repository: std::sync::Arc<crate::infrastructure::persistence::EmployeeCompetencyRepository>,
+) -> EmployeeCompetencyService {
+    EmployeeCompetencyService::with_repository(repository).with_guard(std::sync::Arc::new(EmployeeCompetencyRowRules))
+}
+
+/// A `EmployeeSkillService` over `repository` with its write guard attached: the way to build it, so its writes are
+/// served only with the rules the schema declares.
+pub fn build_employee_skill_service(
+    repository: std::sync::Arc<crate::infrastructure::persistence::EmployeeSkillRepository>,
+) -> EmployeeSkillService {
+    EmployeeSkillService::with_repository(repository).with_guard(std::sync::Arc::new(EmployeeSkillRowRules))
+}
+
+/// A `SkillService` over `repository` with its write guard attached: the way to build it, so its writes are
+/// served only with the rules the schema declares.
+pub fn build_skill_service(
+    repository: std::sync::Arc<crate::infrastructure::persistence::SkillRepository>,
+) -> SkillService {
+    SkillService::with_repository(repository).with_guard(std::sync::Arc::new(SkillRowRules))
+}
