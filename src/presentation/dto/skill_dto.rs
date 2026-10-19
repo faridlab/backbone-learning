@@ -72,10 +72,10 @@ pub struct PatchSkillDto {
     #[cfg_attr(feature = "openapi", schema(example = "example"))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub category: Option<SkillCategory>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option")]
+    pub category: Option<Option<SkillCategory>>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option")]
+    pub description: Option<Option<String>>,
 }
 
 impl PatchSkillDto {
@@ -233,12 +233,4 @@ impl backbone_core::ApplyUpdateDto<UpdateSkillDto> for Skill {
         Ok(self)
     }
 }
-
-// =============================================================================
-// Custom DTOs
-// =============================================================================
-
-// Add custom DTOs specific to Skill here.
-// This section will be preserved during regeneration.
-// >>> END CUSTOM DTOs
 

@@ -14,9 +14,9 @@ pub mod skill_handler;
 
 
 // Re-exports
-pub use competency_handler::{create_competency_routes, create_competency_read_routes, create_competency_write_routes};
-pub use course_handler::{create_course_routes, create_course_read_routes, create_course_write_routes};
-pub use course_enrollment_handler::{create_course_enrollment_routes, create_course_enrollment_read_routes, create_course_enrollment_write_routes};
-pub use employee_competency_handler::{create_employee_competency_routes, create_employee_competency_read_routes, create_employee_competency_write_routes};
-pub use employee_skill_handler::{create_employee_skill_routes, create_employee_skill_read_routes, create_employee_skill_write_routes};
-pub use skill_handler::{create_skill_routes, create_skill_read_routes, create_skill_write_routes};
+pub use competency_handler::{create_competency_routes, create_competency_read_routes, create_competency_write_routes, competency_permissions};
+pub use course_handler::{create_course_routes, create_course_read_routes, create_course_write_routes, course_permissions};
+pub use course_enrollment_handler::{create_course_enrollment_routes, create_course_enrollment_read_routes, create_course_enrollment_write_routes, course_enrollment_permissions};
+pub use employee_competency_handler::{create_employee_competency_routes, create_employee_competency_read_routes, create_employee_competency_write_routes, employee_competency_permissions};
+pub use employee_skill_handler::{create_employee_skill_routes, create_employee_skill_read_routes, create_employee_skill_write_routes, employee_skill_permissions};
+pub use skill_handler::{create_skill_routes, create_skill_read_routes, create_skill_write_routes, skill_permissions};

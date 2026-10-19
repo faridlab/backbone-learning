@@ -82,6 +82,13 @@ impl axum::response::IntoResponse for EmployeeSkillError {
 // Route Configuration
 // =============================================================================
 
+/// The permissions this entity's generic routes require: `employee_skill:<action>` for `read`, `create`,
+/// `update`, `delete`, `restore` and `purge`, with any rename the schema's `requires:` declares.
+pub fn employee_skill_permissions() -> backbone_core::http::CrudPermissions {
+    backbone_core::http::CrudPermissions::new("employee_skill")
+        .in_module("learning")
+}
+
 /// Create Axum router with all 16 Backbone endpoints for EmployeeSkill.
 ///
 /// # Routes
@@ -111,21 +118,23 @@ impl axum::response::IntoResponse for EmployeeSkillError {
 /// let router = create_employee_skill_routes(service);
 /// ```
 pub fn create_employee_skill_routes(service: Arc<EmployeeSkillService>) -> Router {
-    BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::routes(
+    BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::routes_guarded(
         service,
         "/employee_skills",
+        employee_skill_permissions(),
     )
 }
 
 /// Create Axum router with only the read (GET) endpoints for EmployeeSkill.
 ///
-/// Safe for public, unauthenticated exposure (e.g., reference data).
+/// Each route requires the entity's `read` permission, so it needs an authenticated caller.
 /// Mutations must be served separately via `create_employee_skill_write_routes`,
 /// typically wrapped in an auth middleware layer.
 pub fn create_employee_skill_read_routes(service: Arc<EmployeeSkillService>) -> Router {
-    BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::read_routes(
+    BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::read_routes_guarded(
         service,
         "/employee_skills",
+        employee_skill_permissions(),
     )
 }
 
@@ -141,9 +150,10 @@ pub fn create_employee_skill_read_routes(service: Arc<EmployeeSkillService>) -> 
 /// service (e.g. a command router over its domain engine), serve THAT instead
 /// for any mutation that must respect domain rules.
 pub fn create_employee_skill_write_routes(service: Arc<EmployeeSkillService>) -> Router {
-    BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::write_routes(
+    BackboneCrudHandler::<EmployeeSkillService, EmployeeSkill, CreateEmployeeSkillDto, UpdateEmployeeSkillDto, EmployeeSkillResponseDto>::write_routes_guarded(
         service,
         "/employee_skills",
+        employee_skill_permissions(),
     )
 }
 

@@ -176,6 +176,12 @@ impl super::Entity for EmployeeCompetency {
 }
 
 impl backbone_core::PersistentEntity for EmployeeCompetency {
+    fn references() -> &'static [backbone_core::Reference] {
+        const REFERENCES: &[backbone_core::Reference] = &[
+            backbone_core::Reference::new("competency_id", "learning.competencies", "id"),
+        ];
+        REFERENCES
+    }
     fn entity_id(&self) -> String {
         self.id.to_string()
     }

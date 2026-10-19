@@ -37,14 +37,24 @@ pub struct CreateEmployeeSkillDto {
     #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "skill_id")]
     pub skill_id: Uuid,
+    #[serde(default = "default_create_employee_skill_proficiency")]
     pub proficiency: ProficiencyLevel,
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "years_experience")]
     pub years_experience: Option<Decimal>,
+    #[serde(default = "default_create_employee_skill_verification")]
     pub verification: SkillVerification,
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "verified_by")]
     pub verified_by: Option<Uuid>,
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "last_used_at")]
     pub last_used_at: Option<NaiveDate>,
+}
+
+fn default_create_employee_skill_proficiency() -> ProficiencyLevel {
+    ProficiencyLevel::Intermediate
+}
+
+fn default_create_employee_skill_verification() -> SkillVerification {
+    SkillVerification::SelfReported
 }
 
 // =============================================================================
@@ -95,14 +105,14 @@ pub struct PatchEmployeeSkillDto {
     pub skill_id: Option<Uuid>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proficiency: Option<ProficiencyLevel>,
-    #[serde(skip_serializing_if = "Option::is_none", alias = "years_experience")]
-    pub years_experience: Option<Decimal>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option", alias = "years_experience")]
+    pub years_experience: Option<Option<Decimal>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verification: Option<SkillVerification>,
-    #[serde(skip_serializing_if = "Option::is_none", alias = "verified_by")]
-    pub verified_by: Option<Uuid>,
-    #[serde(skip_serializing_if = "Option::is_none", alias = "last_used_at")]
-    pub last_used_at: Option<NaiveDate>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option", alias = "verified_by")]
+    pub verified_by: Option<Option<Uuid>>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option", alias = "last_used_at")]
+    pub last_used_at: Option<Option<NaiveDate>>,
 }
 
 impl PatchEmployeeSkillDto {
@@ -281,12 +291,4 @@ impl backbone_core::ApplyUpdateDto<UpdateEmployeeSkillDto> for EmployeeSkill {
         Ok(self)
     }
 }
-
-// =============================================================================
-// Custom DTOs
-// =============================================================================
-
-// Add custom DTOs specific to EmployeeSkill here.
-// This section will be preserved during regeneration.
-// >>> END CUSTOM DTOs
 

@@ -35,9 +35,14 @@ pub struct CreateEmployeeCompetencyDto {
     #[serde(alias = "competency_id")]
     pub competency_id: Uuid,
     #[cfg_attr(feature = "openapi", schema(example = 42))]
+    #[serde(default = "default_create_employee_competency_level")]
     pub level: i32,
     #[serde(default, skip_serializing_if = "Option::is_none", alias = "assessed_at")]
     pub assessed_at: Option<NaiveDate>,
+}
+
+fn default_create_employee_competency_level() -> i32 {
+    3
 }
 
 // =============================================================================
@@ -85,8 +90,8 @@ pub struct PatchEmployeeCompetencyDto {
     #[cfg_attr(feature = "openapi", schema(example = 42))]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub level: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none", alias = "assessed_at")]
-    pub assessed_at: Option<NaiveDate>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option", alias = "assessed_at")]
+    pub assessed_at: Option<Option<NaiveDate>>,
 }
 
 impl PatchEmployeeCompetencyDto {
@@ -251,12 +256,4 @@ impl backbone_core::ApplyUpdateDto<UpdateEmployeeCompetencyDto> for EmployeeComp
         Ok(self)
     }
 }
-
-// =============================================================================
-// Custom DTOs
-// =============================================================================
-
-// Add custom DTOs specific to EmployeeCompetency here.
-// This section will be preserved during regeneration.
-// >>> END CUSTOM DTOs
 

@@ -36,6 +36,7 @@ pub struct CreateCourseEnrollmentDto {
     #[cfg_attr(feature = "openapi", schema(example = "550e8400-e29b-41d4-a716-446655440000"))]
     #[serde(alias = "employee_id")]
     pub employee_id: Uuid,
+    #[serde(default = "default_create_course_enrollment_status")]
     pub status: EnrollmentStatus,
     #[cfg_attr(feature = "openapi", schema(example = "2024-01-01"))]
     #[serde(alias = "enrolled_at")]
@@ -44,6 +45,10 @@ pub struct CreateCourseEnrollmentDto {
     pub completed_at: Option<NaiveDate>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub score: Option<Decimal>,
+}
+
+fn default_create_course_enrollment_status() -> EnrollmentStatus {
+    EnrollmentStatus::Enrolled
 }
 
 // =============================================================================
@@ -97,10 +102,10 @@ pub struct PatchCourseEnrollmentDto {
     #[cfg_attr(feature = "openapi", schema(example = "2024-01-01"))]
     #[serde(skip_serializing_if = "Option::is_none", alias = "enrolled_at")]
     pub enrolled_at: Option<NaiveDate>,
-    #[serde(skip_serializing_if = "Option::is_none", alias = "completed_at")]
-    pub completed_at: Option<NaiveDate>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub score: Option<Decimal>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option", alias = "completed_at")]
+    pub completed_at: Option<Option<NaiveDate>>,
+    #[serde(default, deserialize_with = "crate::presentation::dto::double_option")]
+    pub score: Option<Option<Decimal>>,
 }
 
 impl PatchCourseEnrollmentDto {
@@ -275,12 +280,4 @@ impl backbone_core::ApplyUpdateDto<UpdateCourseEnrollmentDto> for CourseEnrollme
         Ok(self)
     }
 }
-
-// =============================================================================
-// Custom DTOs
-// =============================================================================
-
-// Add custom DTOs specific to CourseEnrollment here.
-// This section will be preserved during regeneration.
-// >>> END CUSTOM DTOs
 
